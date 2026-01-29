@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - SECRET_KEY=${SECRET_KEY:-cambiar-en-produccion}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-sonnet-4-20250514}
+      - SKILLS_DIRECTORY=/skills
+      - DEBUG=false
+    volumes:
+      # Monta tu directorio de skills aquí
+      - ./your-skills:/skills:ro
+      # Persistir la base de datos
+      - ./data:/app/data
+    restart: unless-stopped
+
+  frontend:
+    image: nginx:alpine
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+# Para producción, considera agregar:
+# - PostgreSQL en lugar de SQLite
+# - Redis para caché
+# - Nginx como reverse proxy con HTTPS
