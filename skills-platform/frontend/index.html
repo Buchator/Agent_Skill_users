@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Platform - DPH</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2c5282;
+            --secondary: #718096;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --warning: #d69e2e;
+            --bg-light: #f7fafc;
+            --bg-white: #ffffff;
+            --text-dark: #1a202c;
+            --text-gray: #4a5568;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            opacity: 0.9;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            opacity: 0.9;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Login Form */
+        .auth-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .auth-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-gray);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Skills Grid */
+        .skills-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .skills-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: var(--bg-white);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .skill-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .skill-description {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+        }
+
+        .skill-category {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--secondary);
+        }
+
+        /* Skill Execution Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal {
+            background: var(--bg-white);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg-white);
+        }
+
+        .modal-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        /* Output */
+        .output-container {
+            background: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-title {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .output-content {
+            background: var(--bg-white);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem;
+            white-space: pre-wrap;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--text-dark);
+            color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .skills-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .modal {
+                max-height: 100vh;
+                border-radius: 0;
+            }
+        }
+
+        /* Hidden */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Markdown styles */
+        .markdown-content h1,
+        .markdown-content h2,
+        .markdown-content h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+        }
+
+        .markdown-content p {
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content ul,
+        .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content code {
+            background: var(--bg-light);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .markdown-content pre {
+            background: var(--bg-light);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+
+        .markdown-content th,
+        .markdown-content td {
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .markdown-content th {
+            background: var(--bg-light);
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        const API_URL = 'http://localhost:8000';
+        
+        // ==================== ESTADO ====================
+        let state = {
+            user: null,
+            token: null,
+            skills: [],
+            selectedSkill: null,
+            activeCategory: 'all',
+            loading: false,
+            output: null
+        };
+
+        // ==================== UTILIDADES ====================
+        function saveAuth(token, user) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            state.token = token;
+            state.user = user;
+        }
+
+        function loadAuth() {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            if (token && user) {
+                state.token = token;
+                state.user = JSON.parse(user);
+                return true;
+            }
+            return false;
+        }
+
+        function clearAuth() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            state.token = null;
+            state.user = null;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function apiCall(endpoint, options = {}) {
+            const headers = {
+                'Content-Type': 'application/json',
+                ...options.headers
+            };
+            
+            if (state.token) {
+                headers['Authorization'] = `Bearer ${state.token}`;
+            }
+
+            const response = await fetch(`${API_URL}${endpoint}`, {
+                ...options,
+                headers
+            });
+
+            if (response.status === 401) {
+                clearAuth();
+                render();
+                throw new Error('Sesión expirada');
+            }
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.detail || 'Error en la solicitud');
+            }
+
+            return data;
+        }
+
+        // ==================== API CALLS ====================
+        async function login(username, password) {
+            const formData = new URLSearchParams();
+            formData.append('username', username);
+            formData.append('password', password);
+
+            const response = await fetch(`${API_URL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.detail || 'Error de autenticación');
+            }
+
+            return data;
+        }
+
+        async function register(userData) {
+            return apiCall('/api/auth/register', {
+                method: 'POST',
+                body: JSON.stringify(userData)
+            });
+        }
+
+        async function fetchSkills() {
+            return apiCall('/api/skills');
+        }
+
+        async function executeSkill(skillId, inputs) {
+            return apiCall('/api/skills/execute', {
+                method: 'POST',
+                body: JSON.stringify({ skill_id: skillId, inputs })
+            });
+        }
+
+        // ==================== COMPONENTES ====================
+        function renderHeader() {
+            if (!state.user) return '';
+            
+            return `
+                <header class="header">
+                    <div class="logo">
+                        ⚡ Skills Platform
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">👤 ${state.user.full_name || state.user.username}</span>
+                        <button class="btn btn-outline" onclick="handleLogout()">
+                            Cerrar sesión
+                        </button>
+                    </div>
+                </header>
+            `;
+        }
+
+        function renderLoginForm() {
+            return `
+                <div class="auth-container">
+                    <h2 class="auth-title">⚡ Skills Platform</h2>
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Usuario o Email</label>
+                            <input type="text" id="loginUsername" required placeholder="Tu usuario o email">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="password" id="loginPassword" required placeholder="Tu contraseña">
+                        </div>
+                        <div id="loginError" class="error-message hidden"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            Iniciar sesión
+                        </button>
+                    </form>
+                    <div class="auth-switch">
+                        ¿No tienes cuenta? <a onclick="showRegister()">Regístrate</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderRegisterForm() {
+            return `
+                <div class="auth-container">
+                    <h2 class="auth-title">Crear cuenta</h2>
+                    <form id="registerForm" onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Nombre completo</label>
+                            <input type="text" id="regFullName" placeholder="Tu nombre">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" id="regEmail" required placeholder="tu@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Usuario *</label>
+                            <input type="text" id="regUsername" required placeholder="usuario123">
+                        </div>
+                        <div class="form-group">
+                            <label>Organización</label>
+                            <input type="text" id="regOrganization" placeholder="Tu empresa">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña *</label>
+                            <input type="password" id="regPassword" required minlength="6" placeholder="Mínimo 6 caracteres">
+                        </div>
+                        <div id="registerError" class="error-message hidden"></div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                            Registrarse
+                        </button>
+                    </form>
+                    <div class="auth-switch">
+                        ¿Ya tienes cuenta? <a onclick="showLogin()">Inicia sesión</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSkillsCatalog() {
+            const categories = ['all', ...new Set(state.skills.map(s => s.category))];
+            const filteredSkills = state.activeCategory === 'all' 
+                ? state.skills 
+                : state.skills.filter(s => s.category === state.activeCategory);
+
+            return `
+                <div class="container">
+                    <div class="skills-header">
+                        <h1 class="skills-title">📚 Catálogo de Skills</h1>
+                        <div class="category-filter">
+                            ${categories.map(cat => `
+                                <button 
+                                    class="category-btn ${state.activeCategory === cat ? 'active' : ''}"
+                                    onclick="setCategory('${cat}')"
+                                >
+                                    ${cat === 'all' ? 'Todos' : cat}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="skills-grid">
+                        ${filteredSkills.map(skill => `
+                            <div class="skill-card" onclick="openSkill('${skill.skill_id}')">
+                                <div class="skill-icon">${skill.icon}</div>
+                                <div class="skill-name">${skill.name}</div>
+                                <div class="skill-description">${skill.description}</div>
+                                <div class="skill-category">${skill.category}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSkillModal() {
+            if (!state.selectedSkill) return '';
+            
+            const skill = state.selectedSkill;
+            const fields = skill.input_schema?.fields || [];
+
+            return `
+                <div class="modal-overlay" onclick="closeModal(event)">
+                    <div class="modal" onclick="event.stopPropagation()">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                <span style="font-size: 1.5rem;">${skill.icon}</span>
+                                <h2>${skill.name}</h2>
+                            </div>
+                            <button class="modal-close" onclick="closeSkill()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="color: var(--text-gray); margin-bottom: 1.5rem;">
+                                ${skill.description}
+                            </p>
+                            <form id="skillForm" onsubmit="handleExecuteSkill(event)">
+                                ${fields.map(field => renderFormField(field)).join('')}
+                                
+                                ${state.loading ? `
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                    </div>
+                                ` : ''}
+                                
+                                ${state.output ? `
+                                    <div class="output-container">
+                                        <div class="output-header">
+                                            <span class="output-title">📄 Resultado</span>
+                                            <button type="button" class="btn btn-secondary" onclick="copyOutput()">
+                                                📋 Copiar
+                                            </button>
+                                        </div>
+                                        <div class="output-content markdown-content" id="outputContent">
+                                            ${formatOutput(state.output)}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeSkill()">
+                                Cerrar
+                            </button>
+                            <button 
+                                type="submit" 
+                                form="skillForm" 
+                                class="btn btn-success"
+                                ${state.loading ? 'disabled' : ''}
+                            >
+                                ${state.loading ? 'Procesando...' : '▶️ Ejecutar Skill'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderFormField(field) {
+            const required = field.required ? 'required' : '';
+            
+            if (field.type === 'select') {
+                return `
+                    <div class="form-group">
+                        <label>${field.label} ${field.required ? '*' : ''}</label>
+                        <select name="${field.name}" ${required}>
+                            <option value="">Seleccionar...</option>
+                            ${field.options.map(opt => `
+                                <option value="${opt}">${opt}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+            
+            if (field.type === 'textarea') {
+                return `
+                    <div class="form-group">
+                        <label>${field.label} ${field.required ? '*' : ''}</label>
+                        <textarea 
+                            name="${field.name}" 
+                            ${required}
+                            placeholder="${field.placeholder || ''}"
+                            rows="4"
+                        ></textarea>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="form-group">
+                    <label>${field.label} ${field.required ? '*' : ''}</label>
+                    <input 
+                        type="${field.type || 'text'}" 
+                        name="${field.name}"
+                        ${required}
+                        placeholder="${field.placeholder || ''}"
+                    >
+                </div>
+            `;
+        }
+
+        function formatOutput(text) {
+            // Conversión básica de markdown a HTML
+            return text
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/`(.+?)`/g, '<code>$1</code>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // ==================== HANDLERS ====================
+        let showingRegister = false;
+
+        function showRegister() {
+            showingRegister = true;
+            render();
+        }
+
+        function showLogin() {
+            showingRegister = false;
+            render();
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            try {
+                const data = await login(username, password);
+                saveAuth(data.access_token, data.user);
+                state.skills = await fetchSkills();
+                showToast('¡Bienvenido!', 'success');
+                render();
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        async function handleRegister(event) {
+            event.preventDefault();
+            const userData = {
+                full_name: document.getElementById('regFullName').value,
+                email: document.getElementById('regEmail').value,
+                username: document.getElementById('regUsername').value,
+                organization: document.getElementById('regOrganization').value,
+                password: document.getElementById('regPassword').value
+            };
+            const errorEl = document.getElementById('registerError');
+
+            try {
+                await register(userData);
+                showToast('¡Cuenta creada! Ahora inicia sesión.', 'success');
+                showLogin();
+            } catch (error) {
+                errorEl.textContent = error.message;
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            clearAuth();
+            state.skills = [];
+            showToast('Sesión cerrada');
+            render();
+        }
+
+        function setCategory(category) {
+            state.activeCategory = category;
+            render();
+        }
+
+        function openSkill(skillId) {
+            state.selectedSkill = state.skills.find(s => s.skill_id === skillId);
+            state.output = null;
+            render();
+        }
+
+        function closeSkill() {
+            state.selectedSkill = null;
+            state.output = null;
+            render();
+        }
+
+        function closeModal(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                closeSkill();
+            }
+        }
+
+        async function handleExecuteSkill(event) {
+            event.preventDefault();
+            const form = event.target;
+            const formData = new FormData(form);
+            const inputs = {};
+            
+            for (let [key, value] of formData.entries()) {
+                inputs[key] = value;
+            }
+
+            state.loading = true;
+            state.output = null;
+            render();
+
+            try {
+                const result = await executeSkill(state.selectedSkill.skill_id, inputs);
+                
+                if (result.success) {
+                    state.output = result.output;
+                    showToast('Skill ejecutado correctamente', 'success');
+                } else {
+                    showToast(result.error || 'Error al ejecutar el skill', 'error');
+                }
+            } catch (error) {
+                showToast(error.message, 'error');
+            } finally {
+                state.loading = false;
+                render();
+            }
+        }
+
+        function copyOutput() {
+            const content = state.output;
+            navigator.clipboard.writeText(content).then(() => {
+                showToast('Copiado al portapapeles', 'success');
+            });
+        }
+
+        // ==================== RENDER ====================
+        function render() {
+            const app = document.getElementById('app');
+            
+            if (!state.user) {
+                app.innerHTML = showingRegister ? renderRegisterForm() : renderLoginForm();
+            } else {
+                app.innerHTML = `
+                    ${renderHeader()}
+                    ${renderSkillsCatalog()}
+                    ${renderSkillModal()}
+                `;
+            }
+        }
+
+        // ==================== INIT ====================
+        async function init() {
+            if (loadAuth()) {
+                try {
+                    state.skills = await fetchSkills();
+                } catch (error) {
+                    clearAuth();
+                }
+            }
+            render();
+        }
+
+        init();
+    </script>
+</body>
+</html>
