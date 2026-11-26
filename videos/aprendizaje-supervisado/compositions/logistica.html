@@ -1,0 +1,79 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:var(--color-ground);overflow:hidden}
+.plane{position:absolute;left:0;top:0;width:1920px;height:1080px}
+.grid line{stroke:#D3DAE2;stroke-width:1}
+.axis{stroke:var(--color-ink);stroke-width:2.5}
+.tick{font:400 28px Lato;fill:#556677}
+.axt{font:italic 400 38px 'EB Garamond';fill:var(--color-ink)}
+.ptA{fill:var(--color-a);stroke:#fff;stroke-width:2}
+.ptB{fill:var(--color-b);stroke:#fff;stroke-width:2}
+.mdl{stroke:var(--color-ink);stroke-width:3;fill:none}
+.dash{stroke:var(--color-ink);stroke-width:2;stroke-dasharray:8 7;fill:none}
+.acc{stroke:var(--color-accent);stroke-width:3;fill:none}
+.accd{stroke:var(--color-accent);stroke-width:2.5;stroke-dasharray:8 7;fill:none}
+.regA{fill:var(--color-a);opacity:0}
+.regB{fill:var(--color-b);opacity:0}
+.lbl{font:400 28px Lato;fill:var(--color-ink)}
+.lblacc{font:700 30px Lato;fill:var(--color-accent)}
+.q-ring{fill:var(--color-ground);stroke:var(--color-ink);stroke-width:3}
+.q-txt{font:700 24px Lato;fill:var(--color-ink)}
+.panel{position:absolute;left:1060px;top:150px;width:740px;color:var(--color-ink)}
+.pn-name{font:700 56px Montserrat;letter-spacing:-0.01em;line-height:1.1}
+.pn-name span,.pn-line span{display:inline-block}
+.pn-aka{font:400 30px Lato;color:#556677;margin-top:12px}
+.pn-line{font:400 36px Lato;line-height:1.32;margin-top:30px}
+.pn-math{font:italic 400 42px 'EB Garamond';margin-top:26px}
+.out{position:absolute;left:1060px;top:640px;width:740px;height:300px;color:var(--color-ink);font:400 30px Lato}
+.dec{font:700 36px Montserrat;color:var(--color-accent)}
+.row{display:flex;align-items:center;gap:18px;height:46px}
+.sw{display:inline-block;width:18px;height:18px}
+.swA{background:var(--color-a);border-radius:50%}
+.swB{background:var(--color-b)}
+.bar{height:22px;background:var(--color-ink)}
+.mut{color:#556677}
+</style>
+  <div id="root" data-composition-id="logistica" data-width="1920" data-height="1080">
+    <svg class="plane" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="logistica-clip"><rect x="150" y="140" width="800" height="800"/></clipPath></defs>
+<g class="grid" id="s2-grid"><line class="s2-gl" x1="150" y1="940" x2="950" y2="940"/><line class="s2-gl" x1="150" y1="940" x2="150" y2="140"/><line class="s2-gl" x1="150" y1="860" x2="950" y2="860"/><line class="s2-gl" x1="230" y1="940" x2="230" y2="140"/><line class="s2-gl" x1="150" y1="780" x2="950" y2="780"/><line class="s2-gl" x1="310" y1="940" x2="310" y2="140"/><line class="s2-gl" x1="150" y1="700" x2="950" y2="700"/><line class="s2-gl" x1="390" y1="940" x2="390" y2="140"/><line class="s2-gl" x1="150" y1="620" x2="950" y2="620"/><line class="s2-gl" x1="470" y1="940" x2="470" y2="140"/><line class="s2-gl" x1="150" y1="540" x2="950" y2="540"/><line class="s2-gl" x1="550" y1="940" x2="550" y2="140"/><line class="s2-gl" x1="150" y1="460" x2="950" y2="460"/><line class="s2-gl" x1="630" y1="940" x2="630" y2="140"/><line class="s2-gl" x1="150" y1="380" x2="950" y2="380"/><line class="s2-gl" x1="710" y1="940" x2="710" y2="140"/><line class="s2-gl" x1="150" y1="300" x2="950" y2="300"/><line class="s2-gl" x1="790" y1="940" x2="790" y2="140"/><line class="s2-gl" x1="150" y1="220" x2="950" y2="220"/><line class="s2-gl" x1="870" y1="940" x2="870" y2="140"/><line class="s2-gl" x1="150" y1="140" x2="950" y2="140"/><line class="s2-gl" x1="950" y1="940" x2="950" y2="140"/></g><line class="axis" id="s2-ax" x1="150" y1="940" x2="950" y2="940"/><line class="axis" id="s2-ay" x1="150" y1="940" x2="150" y2="140"/><text class="tick" x="150" y="980" text-anchor="middle">0</text><text class="tick" x="310" y="980" text-anchor="middle">2</text><text class="tick" x="470" y="980" text-anchor="middle">4</text><text class="tick" x="630" y="980" text-anchor="middle">6</text><text class="tick" x="790" y="980" text-anchor="middle">8</text><text class="tick" x="950" y="980" text-anchor="middle">10</text><text class="tick" x="134" y="870" text-anchor="end">0</text><text class="tick" x="134" y="550" text-anchor="end">0.5</text><text class="tick" x="134" y="230" text-anchor="end">1</text><text class="axt" id="s2-xt" x="974" y="952">x</text><text class="axt" id="s2-yt" x="138" y="114" text-anchor="middle">P(B)</text><line id="s2-thr" class="dash" x1="150" y1="540" x2="150" y2="540"/><text id="s2-thl" class="lbl" x="950" y="526" text-anchor="end" opacity="0">umbral 0.5</text><path id="s2-sig" class="mdl" d="M150 859 L158 858.9 L166 858.7 L174 858.6 L182 858.4 L190 858.2 L198 857.9 L206 857.6 L214 857.3 L222 856.9 L230 856.5 L238 856 L246 855.5 L254 854.9 L262 854.2 L270 853.4 L278 852.5 L286 851.5 L294 850.3 L302 849 L310 847.5 L318 845.9 L326 844 L334 841.9 L342 839.4 L350 836.7 L358 833.7 L366 830.2 L374 826.4 L382 822 L390 817.2 L398 811.8 L406 805.7 L414 799 L422 791.5 L430 783.3 L438 774.2 L446 764.2 L454 753.2 L462 741.3 L470 728.4 L478 714.5 L486 699.5 L494 683.6 L502 666.7 L510 649 L518 630.5 L526 611.2 L534 591.5 L542 571.3 L550 550.8 L558 530.3 L566 509.8 L574 489.6 L582 469.8 L590 450.5 L598 432 L606 414.2 L614 397.3 L622 381.3 L630 366.3 L638 352.3 L646 339.3 L654 327.4 L662 316.4 L670 306.3 L678 297.2 L686 288.9 L694 281.4 L702 274.6 L710 268.5 L718 263.1 L726 258.2 L734 253.8 L742 250 L750 246.5 L758 243.4 L766 240.7 L774 238.3 L782 236.1 L790 234.2 L798 232.5 L806 231.1 L814 229.7 L822 228.6 L830 227.6 L838 226.7 L846 225.9 L854 225.2 L862 224.5 L870 224 L878 223.5 L886 223.1 L894 222.7 L902 222.4 L910 222.1 L918 221.9 L926 221.6 L934 221.4 L942 221.3 L950 221.1 " pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><circle id="s2-p0" class="s2-pt ptA" cx="222" cy="860" r="11" /><circle id="s2-p1" class="s2-pt ptA" cx="286" cy="860" r="11" /><circle id="s2-p2" class="s2-pt ptA" cx="342" cy="860" r="11" /><circle id="s2-p3" class="s2-pt ptA" cx="390" cy="860" r="11" /><circle id="s2-p4" class="s2-pt ptA" cx="438" cy="860" r="11" /><rect id="s2-p5" class="s2-pt ptB" x="484" y="210" width="20" height="20" /><circle id="s2-p6" class="s2-pt ptA" cx="542" cy="860" r="11" /><rect id="s2-p7" class="s2-pt ptB" x="556" y="210" width="20" height="20" /><circle id="s2-p8" class="s2-pt ptA" cx="614" cy="860" r="11" /><rect id="s2-p9" class="s2-pt ptB" x="660" y="210" width="20" height="20" /><rect id="s2-p10" class="s2-pt ptB" x="708" y="210" width="20" height="20" /><rect id="s2-p11" class="s2-pt ptB" x="764" y="210" width="20" height="20" /><rect id="s2-p12" class="s2-pt ptB" x="820" y="210" width="20" height="20" /><rect id="s2-p13" class="s2-pt ptB" x="876" y="210" width="20" height="20" /><line id="s2-vx" class="accd" x1="646" y1="940" x2="646" y2="940"/><line id="s2-hy" class="accd" x1="646" y1="339.3" x2="646" y2="339.3"/><text id="s2-xl" class="lblacc" x="646" y="922" text-anchor="middle" opacity="0">x = 6.2</text><circle id="s2-pp" cx="646" cy="339.3" r="13" fill="var(--color-b)" stroke="var(--color-accent)" stroke-width="5" opacity="0"/><text id="s2-pl" class="lblacc" x="164" y="325.3" opacity="0">p = 0.81</text>
+    </svg>
+<div class="panel" id="s2-panel"><div class="pn-name" id="s2-name"><span class="s2-nw">Regresión</span> <span class="s2-nw">logística</span></div><div class="pn-aka" id="s2-aka">Ajuste por máxima verosimilitud (log-loss)</div><div class="pn-line" id="s2-line"><span class="s2-lw">Convierte</span> <span class="s2-lw">una</span> <span class="s2-lw">suma</span> <span class="s2-lw">lineal</span> <span class="s2-lw">en</span> <span class="s2-lw">probabilidad</span> <span class="s2-lw">con</span> <span class="s2-lw">la</span> <span class="s2-lw">sigmoide</span></div><div class="pn-math" id="s2-math">p = 1 / (1 + e<sup>−(β₀ + β₁x)</sup>)</div></div><div class="out" id="s2-out">
+      <div class="row" id="s2-r0"><span class="sw swA"></span><span>clase A → p = 0</span><span class="sw swB" style="margin-left:24px"></span><span>clase B → p = 1</span></div>
+      <div class="dec" id="s2-dec" style="margin-top:40px">p = 0.81 &gt; 0.5 → Clase B</div></div>
+  </div>
+  <script>
+
+const tl = gsap.timeline({ paused: true });
+const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#16232F';
+function panelIn(t0){
+  tl.fromTo('.s2-nw',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:0.13,stagger:0.067,ease:'power4.out'},t0);
+  if(document.getElementById('s2-aka')) tl.fromTo('#s2-aka',{opacity:0},{opacity:1,duration:0.3,ease:'power2.out'},t0+0.25);
+  tl.fromTo('.s2-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},t0+0.35);
+  if(document.getElementById('s2-math')) tl.fromTo('#s2-math',{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t0+0.9);
+}
+function out(sel,t){ tl.to(sel,{opacity:0,filter:'blur(8px)',duration:0.2,ease:'power3.in'},t); }
+function inn(sel,t,d=0.25){ tl.fromTo(sel,{opacity:0},{opacity:1,duration:d,ease:'power2.out'},t); }
+function blurIn(sel,t){ tl.fromTo(sel,{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t); }
+function drawLine(sel,t,x1,y1,x2,y2,d=0.5,ease='power2.inOut'){ tl.fromTo(sel,{attr:{x1,y1,x2:x1,y2:y1},opacity:1},{attr:{x2,y2},duration:d,ease},t); }
+function popQ(t, cls){ // the new data point receives the model's answer
+  tl.to('#s2-qfill',{attr:{r:19},fill:cls===1?'#B8642A':'#2B5D8C',stroke:'#0F7B6C',strokeWidth:5,duration:0.35,ease:'expo.out'},t);
+  tl.to('#s2-qt',{opacity:0,duration:0.1},t);
+}
+panelIn(0.05);
+tl.fromTo('.s2-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,stagger:0.04,ease:'expo.out'},0.1);
+inn('#s2-r0',0.8);
+tl.fromTo('#s2-sig',{strokeDashoffset:1},{strokeDashoffset:0,duration:1.3,ease:'power2.inOut'},1.0);
+drawLine('#s2-thr',2.3,150,540,950,540,0.5);
+inn('#s2-thl',2.6,0.2);
+inn('#s2-xl',3.1,0.2);
+drawLine('#s2-vx',3.2,646,940,646,339.3,0.55);
+tl.fromTo('#s2-pp',{opacity:0,attr:{r:4}},{opacity:1,attr:{r:13},duration:0.4,ease:'expo.out'},3.75);
+drawLine('#s2-hy',3.85,646,339.3,150,339.3,0.45);
+inn('#s2-pl',4.2,0.2);
+blurIn('#s2-dec',4.4);
+out(['#s2-panel','#s2-out','#s2-sig','#s2-thr','#s2-thl','.s2-pt','#s2-vx','#s2-hy','#s2-pp','#s2-pl','#s2-xl','#s2-xt','#s2-yt'],6.28);
+
+window.__timelines["logistica"] = tl;
+  </script>
+</template>

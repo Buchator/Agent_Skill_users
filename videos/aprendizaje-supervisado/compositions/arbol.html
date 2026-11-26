@@ -1,0 +1,87 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:var(--color-ground);overflow:hidden}
+.plane{position:absolute;left:0;top:0;width:1920px;height:1080px}
+.grid line{stroke:#D3DAE2;stroke-width:1}
+.axis{stroke:var(--color-ink);stroke-width:2.5}
+.tick{font:400 28px Lato;fill:#556677}
+.axt{font:italic 400 38px 'EB Garamond';fill:var(--color-ink)}
+.ptA{fill:var(--color-a);stroke:#fff;stroke-width:2}
+.ptB{fill:var(--color-b);stroke:#fff;stroke-width:2}
+.mdl{stroke:var(--color-ink);stroke-width:3;fill:none}
+.dash{stroke:var(--color-ink);stroke-width:2;stroke-dasharray:8 7;fill:none}
+.acc{stroke:var(--color-accent);stroke-width:3;fill:none}
+.accd{stroke:var(--color-accent);stroke-width:2.5;stroke-dasharray:8 7;fill:none}
+.regA{fill:var(--color-a);opacity:0}
+.regB{fill:var(--color-b);opacity:0}
+.lbl{font:400 28px Lato;fill:var(--color-ink)}
+.lblacc{font:700 30px Lato;fill:var(--color-accent)}
+.q-ring{fill:var(--color-ground);stroke:var(--color-ink);stroke-width:3}
+.q-txt{font:700 24px Lato;fill:var(--color-ink)}
+.panel{position:absolute;left:1060px;top:150px;width:740px;color:var(--color-ink)}
+.pn-name{font:700 56px Montserrat;letter-spacing:-0.01em;line-height:1.1}
+.pn-name span,.pn-line span{display:inline-block}
+.pn-aka{font:400 30px Lato;color:#556677;margin-top:12px}
+.pn-line{font:400 36px Lato;line-height:1.32;margin-top:30px}
+.pn-math{font:italic 400 42px 'EB Garamond';margin-top:26px}
+.out{position:absolute;left:1060px;top:640px;width:740px;height:300px;color:var(--color-ink);font:400 30px Lato}
+.dec{font:700 36px Montserrat;color:var(--color-accent)}
+.row{display:flex;align-items:center;gap:18px;height:46px}
+.sw{display:inline-block;width:18px;height:18px}
+.swA{background:var(--color-a);border-radius:50%}
+.swB{background:var(--color-b)}
+.bar{height:22px;background:var(--color-ink)}
+.mut{color:#556677}
+</style>
+  <div id="root" data-composition-id="arbol" data-width="1920" data-height="1080">
+    <svg class="plane" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="arbol-clip"><rect x="150" y="140" width="800" height="800"/></clipPath></defs>
+<g class="grid" id="s3-grid"><line class="s3-gl" x1="150" y1="940" x2="950" y2="940"/><line class="s3-gl" x1="150" y1="940" x2="150" y2="140"/><line class="s3-gl" x1="150" y1="860" x2="950" y2="860"/><line class="s3-gl" x1="230" y1="940" x2="230" y2="140"/><line class="s3-gl" x1="150" y1="780" x2="950" y2="780"/><line class="s3-gl" x1="310" y1="940" x2="310" y2="140"/><line class="s3-gl" x1="150" y1="700" x2="950" y2="700"/><line class="s3-gl" x1="390" y1="940" x2="390" y2="140"/><line class="s3-gl" x1="150" y1="620" x2="950" y2="620"/><line class="s3-gl" x1="470" y1="940" x2="470" y2="140"/><line class="s3-gl" x1="150" y1="540" x2="950" y2="540"/><line class="s3-gl" x1="550" y1="940" x2="550" y2="140"/><line class="s3-gl" x1="150" y1="460" x2="950" y2="460"/><line class="s3-gl" x1="630" y1="940" x2="630" y2="140"/><line class="s3-gl" x1="150" y1="380" x2="950" y2="380"/><line class="s3-gl" x1="710" y1="940" x2="710" y2="140"/><line class="s3-gl" x1="150" y1="300" x2="950" y2="300"/><line class="s3-gl" x1="790" y1="940" x2="790" y2="140"/><line class="s3-gl" x1="150" y1="220" x2="950" y2="220"/><line class="s3-gl" x1="870" y1="940" x2="870" y2="140"/><line class="s3-gl" x1="150" y1="140" x2="950" y2="140"/><line class="s3-gl" x1="950" y1="940" x2="950" y2="140"/></g><line class="axis" id="s3-ax" x1="150" y1="940" x2="950" y2="940"/><line class="axis" id="s3-ay" x1="150" y1="940" x2="150" y2="140"/><text class="tick" x="150" y="980" text-anchor="middle">0</text><text class="tick" x="310" y="980" text-anchor="middle">2</text><text class="tick" x="470" y="980" text-anchor="middle">4</text><text class="tick" x="630" y="980" text-anchor="middle">6</text><text class="tick" x="790" y="980" text-anchor="middle">8</text><text class="tick" x="950" y="980" text-anchor="middle">10</text><text class="tick" x="134" y="950" text-anchor="end">0</text><text class="tick" x="134" y="790" text-anchor="end">2</text><text class="tick" x="134" y="630" text-anchor="end">4</text><text class="tick" x="134" y="470" text-anchor="end">6</text><text class="tick" x="134" y="310" text-anchor="end">8</text><text class="tick" x="134" y="150" text-anchor="end">10</text><text class="axt" id="s3-xt" x="974" y="952">x₁</text><text class="axt" id="s3-yt" x="138" y="114" text-anchor="middle">x₂</text><g id="s3-reg1" class=""><rect class="regB" x="602" y="140" width="348" height="800"/></g><g id="s3-reg2" class=""><rect class="regA" x="150" y="412" width="452" height="528"/><rect class="regB" x="150" y="140" width="452" height="272"/></g><line id="s3-sp1" class="mdl" x1="602" y1="140" x2="602" y2="140" data-x2="602" data-y2="940"/><line id="s3-sp2" class="mdl" x1="150" y1="412" x2="150" y2="412" data-x2="602" data-y2="412"/><text id="s3-sl1" class="lbl" x="612" y="174" opacity="0">x₁ = 5.65</text><text id="s3-sl2" class="lbl" x="162" y="400" opacity="0">x₂ = 6.6</text><circle id="s3-p0" class="s3-pt ptA" cx="246" cy="780" r="11" /><circle id="s3-p1" class="s3-pt ptA" cx="318" cy="852" r="11" /><circle id="s3-p2" class="s3-pt ptA" cx="278" cy="652" r="11" /><circle id="s3-p3" class="s3-pt ptA" cx="382" cy="732" r="11" /><circle id="s3-p4" class="s3-pt ptA" cx="422" cy="828" r="11" /><circle id="s3-p5" class="s3-pt ptA" cx="222" cy="556" r="11" /><circle id="s3-p6" class="s3-pt ptA" cx="358" cy="588" r="11" /><circle id="s3-p7" class="s3-pt ptA" cx="462" cy="676" r="11" /><circle id="s3-p8" class="s3-pt ptA" cx="502" cy="780" r="11" /><circle id="s3-p9" class="s3-pt ptA" cx="406" cy="492" r="11" /><circle id="s3-p10" class="s3-pt ptA" cx="526" cy="612" r="11" /><circle id="s3-p11" class="s3-pt ptA" cx="598" cy="716" r="11" /><circle id="s3-p12" class="s3-pt ptA" cx="558" cy="532" r="11" /><rect id="s3-p13" class="s3-pt ptB" x="828" y="258" width="20" height="20" /><rect id="s3-p14" class="s3-pt ptB" x="732" y="218" width="20" height="20" /><rect id="s3-p15" class="s3-pt ptB" x="852" y="378" width="20" height="20" /><rect id="s3-p16" class="s3-pt ptB" x="668" y="338" width="20" height="20" /><rect id="s3-p17" class="s3-pt ptB" x="772" y="442" width="20" height="20" /><rect id="s3-p18" class="s3-pt ptB" x="876" y="218" width="20" height="20" /><rect id="s3-p19" class="s3-pt ptB" x="612" y="242" width="20" height="20" /><rect id="s3-p20" class="s3-pt ptB" x="692" y="482" width="20" height="20" /><rect id="s3-p21" class="s3-pt ptB" x="812" y="538" width="20" height="20" /><rect id="s3-p22" class="s3-pt ptB" x="596" y="402" width="20" height="20" /><rect id="s3-p23" class="s3-pt ptB" x="636" y="554" width="20" height="20" /><rect id="s3-p24" class="s3-pt ptB" x="748" y="618" width="20" height="20" /><rect id="s3-p25" class="s3-pt ptB" x="508" y="322" width="20" height="20" /><g id="s3-q"><circle id="s3-qfill" cx="606" cy="508" r="17" class="q-ring"/><text id="s3-qt" class="q-txt" x="606" y="516" text-anchor="middle">?</text><text id="s3-ql" class="lbl" x="634" y="486">dato nuevo</text></g>
+    </svg>
+<div class="panel" id="s3-panel"><div class="pn-name" id="s3-name"><span class="s3-nw">Árbol</span> <span class="s3-nw">de</span> <span class="s3-nw">decisión</span></div><div class="pn-line" id="s3-line"><span class="s3-lw">Corta</span> <span class="s3-lw">el</span> <span class="s3-lw">plano</span> <span class="s3-lw">donde</span> <span class="s3-lw">los</span> <span class="s3-lw">grupos</span> <span class="s3-lw">quedan</span> <span class="s3-lw">más</span> <span class="s3-lw">puros</span></div><div class="pn-math" id="s3-math">Gini = 1 − Σ p<sub>k</sub>²</div></div><div class="out" id="s3-out" style="top:560px"><svg id="s3-tree" width="740" height="300" viewBox="0 0 740 300" style="position:absolute;left:0;top:0">
+    <line id="s3-e1" x1="330" y1="52" x2="190" y2="128" stroke="var(--color-ink)" stroke-width="2"/><text id="s3-e1t" x="225" y="84" class="lbl" fill="#556677">sí</text><line id="s3-e2" x1="370" y1="52" x2="560" y2="132" stroke="var(--color-ink)" stroke-width="2"/><text id="s3-e2t" x="480" y="84" class="lbl" fill="#556677">no</text>
+    <line id="s3-e3" x1="160" y1="180" x2="90" y2="238" stroke="var(--color-ink)" stroke-width="2"/><text id="s3-e3t" x="90" y="206" class="lbl" fill="#556677">sí</text><line id="s3-e4" x1="220" y1="180" x2="300" y2="238" stroke="var(--color-ink)" stroke-width="2"/><text id="s3-e4t" x="272" y="206" class="lbl" fill="#556677">no</text>
+    <g id="s3-n0"><rect x="235" y="4" width="230" height="52" rx="4" fill="var(--color-ground)" stroke="var(--color-ink)" stroke-width="2"/><text x="350" y="40" text-anchor="middle" class="lbl">x₁ &lt; 5.65</text></g><g id="s3-n1"><rect x="75" y="128" width="230" height="52" rx="4" fill="var(--color-ground)" stroke="var(--color-ink)" stroke-width="2"/><text x="190" y="164" text-anchor="middle" class="lbl">x₂ &lt; 6.6</text></g>
+    <g id="s3-l1"><rect x="542" y="136" width="36" height="36" fill="var(--color-b)"/><text x="590" y="164" class="lbl">B</text></g><g id="s3-l2"><circle cx="90" cy="262" r="19" fill="var(--color-a)"/><text x="120" y="272" class="lbl">A</text></g><g id="s3-l3"><rect x="282" y="244" width="36" height="36" fill="var(--color-b)"/><text x="330" y="272" class="lbl">B</text></g>
+  </svg>
+      <div class="row" id="s3-gini" style="position:absolute;left:420px;top:236px;white-space:nowrap"><span class="mut">Gini</span><b id="s3-g0">0.50</b><span id="s3-g1">→ 0.07</span><span id="s3-g2">→ 0.00</span></div>
+      <div class="dec" id="s3-dec" style="position:absolute;left:0;top:318px">x₁ = 5.7 ≥ 5.65 → Clase B</div></div>
+  </div>
+  <script>
+
+const tl = gsap.timeline({ paused: true });
+const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#16232F';
+function panelIn(t0){
+  tl.fromTo('.s3-nw',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:0.13,stagger:0.067,ease:'power4.out'},t0);
+  if(document.getElementById('s3-aka')) tl.fromTo('#s3-aka',{opacity:0},{opacity:1,duration:0.3,ease:'power2.out'},t0+0.25);
+  tl.fromTo('.s3-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},t0+0.35);
+  if(document.getElementById('s3-math')) tl.fromTo('#s3-math',{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t0+0.9);
+}
+function out(sel,t){ tl.to(sel,{opacity:0,filter:'blur(8px)',duration:0.2,ease:'power3.in'},t); }
+function inn(sel,t,d=0.25){ tl.fromTo(sel,{opacity:0},{opacity:1,duration:d,ease:'power2.out'},t); }
+function blurIn(sel,t){ tl.fromTo(sel,{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t); }
+function drawLine(sel,t,x1,y1,x2,y2,d=0.5,ease='power2.inOut'){ tl.fromTo(sel,{attr:{x1,y1,x2:x1,y2:y1},opacity:1},{attr:{x2,y2},duration:d,ease},t); }
+function popQ(t, cls){ // the new data point receives the model's answer
+  tl.to('#s3-qfill',{attr:{r:19},fill:cls===1?'#B8642A':'#2B5D8C',stroke:'#0F7B6C',strokeWidth:5,duration:0.35,ease:'expo.out'},t);
+  tl.to('#s3-qt',{opacity:0,duration:0.1},t);
+}
+panelIn(0.05);
+tl.fromTo('.s3-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,stagger:0.025,ease:'expo.out'},0.1);
+tl.fromTo('#s3-q',{opacity:0,scale:0.4,svgOrigin:'606 508'},{opacity:1,scale:1,svgOrigin:'606 508',duration:0.5,ease:'expo.out'},0.7);
+tl.to('#s3-ql',{opacity:0,duration:0.2,ease:'power3.in'},1.05);
+inn('#s3-n0',1.1);inn(['#s3-gini','#s3-g0'],1.2);
+drawLine('#s3-sp1',1.1,602,140,602,940,0.6);
+inn('#s3-sl1',1.6,0.2);
+tl.to('#s3-reg1 rect',{opacity:0.16,duration:0.35},1.75);inn(['#s3-e2','#s3-e2t','#s3-l1'],1.75);inn('#s3-g1',1.75);
+drawLine('#s3-sp2',2.4,150,412,602,412,0.55);
+inn('#s3-sl2',2.85,0.2);
+inn(['#s3-e1','#s3-e1t','#s3-n1'],2.4);
+tl.to('#s3-reg2 rect',{opacity:0.16,duration:0.35},3.0);inn(['#s3-e3','#s3-e3t','#s3-e4','#s3-e4t','#s3-l2','#s3-l3'],3.0);inn('#s3-g2',3.1);
+tl.to(['#s3-n0 rect','#s3-l1 rect'],{stroke:'#0F7B6C',strokeWidth:4,duration:0.2},3.9);tl.to('#s3-e2',{stroke:'#0F7B6C',strokeWidth:4,duration:0.2},4.0);
+popQ(4.3,1);blurIn('#s3-dec',4.3);
+
+out(['#s3-panel','#s3-out','#s3-reg1','#s3-reg2','#s3-sp1','#s3-sp2','#s3-sl1','#s3-sl2','#s3-q'],6.28);
+
+window.__timelines["arbol"] = tl;
+  </script>
+</template>

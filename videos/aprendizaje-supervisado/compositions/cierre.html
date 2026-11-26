@@ -1,0 +1,66 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:var(--color-ground);overflow:hidden}
+.plane{position:absolute;left:0;top:0;width:1920px;height:1080px}
+.grid line{stroke:#D3DAE2;stroke-width:1}
+.axis{stroke:var(--color-ink);stroke-width:2.5}
+.tick{font:400 28px Lato;fill:#556677}
+.axt{font:italic 400 38px 'EB Garamond';fill:var(--color-ink)}
+.ptA{fill:var(--color-a);stroke:#fff;stroke-width:2}
+.ptB{fill:var(--color-b);stroke:#fff;stroke-width:2}
+.mdl{stroke:var(--color-ink);stroke-width:3;fill:none}
+.dash{stroke:var(--color-ink);stroke-width:2;stroke-dasharray:8 7;fill:none}
+.acc{stroke:var(--color-accent);stroke-width:3;fill:none}
+.accd{stroke:var(--color-accent);stroke-width:2.5;stroke-dasharray:8 7;fill:none}
+.regA{fill:var(--color-a);opacity:0}
+.regB{fill:var(--color-b);opacity:0}
+.lbl{font:400 28px Lato;fill:var(--color-ink)}
+.lblacc{font:700 30px Lato;fill:var(--color-accent)}
+.q-ring{fill:var(--color-ground);stroke:var(--color-ink);stroke-width:3}
+.q-txt{font:700 24px Lato;fill:var(--color-ink)}
+.panel{position:absolute;left:1060px;top:150px;width:740px;color:var(--color-ink)}
+.pn-name{font:700 56px Montserrat;letter-spacing:-0.01em;line-height:1.1}
+.pn-name span,.pn-line span{display:inline-block}
+.pn-aka{font:400 30px Lato;color:#556677;margin-top:12px}
+.pn-line{font:400 36px Lato;line-height:1.32;margin-top:30px}
+.pn-math{font:italic 400 42px 'EB Garamond';margin-top:26px}
+.out{position:absolute;left:1060px;top:640px;width:740px;height:300px;color:var(--color-ink);font:400 30px Lato}
+.dec{font:700 36px Montserrat;color:var(--color-accent)}
+.row{display:flex;align-items:center;gap:18px;height:46px}
+.sw{display:inline-block;width:18px;height:18px}
+.swA{background:var(--color-a);border-radius:50%}
+.swB{background:var(--color-b)}
+.bar{height:22px;background:var(--color-ink)}
+.mut{color:#556677}
+</style>
+  <div id="root" data-composition-id="cierre" data-width="1920" data-height="1080">
+    <svg class="plane" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="cierre-clip"><rect x="150" y="140" width="800" height="800"/></clipPath></defs>
+<g class="grid" id="fin-grid"><line class="fin-gl" x1="150" y1="940" x2="950" y2="940"/><line class="fin-gl" x1="150" y1="940" x2="150" y2="140"/><line class="fin-gl" x1="150" y1="860" x2="950" y2="860"/><line class="fin-gl" x1="230" y1="940" x2="230" y2="140"/><line class="fin-gl" x1="150" y1="780" x2="950" y2="780"/><line class="fin-gl" x1="310" y1="940" x2="310" y2="140"/><line class="fin-gl" x1="150" y1="700" x2="950" y2="700"/><line class="fin-gl" x1="390" y1="940" x2="390" y2="140"/><line class="fin-gl" x1="150" y1="620" x2="950" y2="620"/><line class="fin-gl" x1="470" y1="940" x2="470" y2="140"/><line class="fin-gl" x1="150" y1="540" x2="950" y2="540"/><line class="fin-gl" x1="550" y1="940" x2="550" y2="140"/><line class="fin-gl" x1="150" y1="460" x2="950" y2="460"/><line class="fin-gl" x1="630" y1="940" x2="630" y2="140"/><line class="fin-gl" x1="150" y1="380" x2="950" y2="380"/><line class="fin-gl" x1="710" y1="940" x2="710" y2="140"/><line class="fin-gl" x1="150" y1="300" x2="950" y2="300"/><line class="fin-gl" x1="790" y1="940" x2="790" y2="140"/><line class="fin-gl" x1="150" y1="220" x2="950" y2="220"/><line class="fin-gl" x1="870" y1="940" x2="870" y2="140"/><line class="fin-gl" x1="150" y1="140" x2="950" y2="140"/><line class="fin-gl" x1="950" y1="940" x2="950" y2="140"/></g><line class="axis" id="fin-ax" x1="150" y1="940" x2="950" y2="940"/><line class="axis" id="fin-ay" x1="150" y1="940" x2="150" y2="140"/><text class="tick" x="150" y="980" text-anchor="middle">0</text><text class="tick" x="310" y="980" text-anchor="middle">2</text><text class="tick" x="470" y="980" text-anchor="middle">4</text><text class="tick" x="630" y="980" text-anchor="middle">6</text><text class="tick" x="790" y="980" text-anchor="middle">8</text><text class="tick" x="950" y="980" text-anchor="middle">10</text><text class="tick" x="134" y="950" text-anchor="end">0</text><text class="tick" x="134" y="790" text-anchor="end">2</text><text class="tick" x="134" y="630" text-anchor="end">4</text><text class="tick" x="134" y="470" text-anchor="end">6</text><text class="tick" x="134" y="310" text-anchor="end">8</text><text class="tick" x="134" y="150" text-anchor="end">10</text><text class="axt" id="fin-xt" x="974" y="952">x₁</text><text class="axt" id="fin-yt" x="138" y="114" text-anchor="middle">x₂</text><circle id="fin-p0" class="fin-pt ptA" cx="246" cy="780" r="11" /><circle id="fin-p1" class="fin-pt ptA" cx="318" cy="852" r="11" /><circle id="fin-p2" class="fin-pt ptA" cx="278" cy="652" r="11" /><circle id="fin-p3" class="fin-pt ptA" cx="382" cy="732" r="11" /><circle id="fin-p4" class="fin-pt ptA" cx="422" cy="828" r="11" /><circle id="fin-p5" class="fin-pt ptA" cx="222" cy="556" r="11" /><circle id="fin-p6" class="fin-pt ptA" cx="358" cy="588" r="11" /><circle id="fin-p7" class="fin-pt ptA" cx="462" cy="676" r="11" /><circle id="fin-p8" class="fin-pt ptA" cx="502" cy="780" r="11" /><circle id="fin-p9" class="fin-pt ptA" cx="406" cy="492" r="11" /><circle id="fin-p10" class="fin-pt ptA" cx="526" cy="612" r="11" /><circle id="fin-p11" class="fin-pt ptA" cx="598" cy="716" r="11" /><circle id="fin-p12" class="fin-pt ptA" cx="558" cy="532" r="11" /><rect id="fin-p13" class="fin-pt ptB" x="828" y="258" width="20" height="20" /><rect id="fin-p14" class="fin-pt ptB" x="732" y="218" width="20" height="20" /><rect id="fin-p15" class="fin-pt ptB" x="852" y="378" width="20" height="20" /><rect id="fin-p16" class="fin-pt ptB" x="668" y="338" width="20" height="20" /><rect id="fin-p17" class="fin-pt ptB" x="772" y="442" width="20" height="20" /><rect id="fin-p18" class="fin-pt ptB" x="876" y="218" width="20" height="20" /><rect id="fin-p19" class="fin-pt ptB" x="612" y="242" width="20" height="20" /><rect id="fin-p20" class="fin-pt ptB" x="692" y="482" width="20" height="20" /><rect id="fin-p21" class="fin-pt ptB" x="812" y="538" width="20" height="20" /><rect id="fin-p22" class="fin-pt ptB" x="596" y="402" width="20" height="20" /><rect id="fin-p23" class="fin-pt ptB" x="636" y="554" width="20" height="20" /><rect id="fin-p24" class="fin-pt ptB" x="748" y="618" width="20" height="20" /><rect id="fin-p25" class="fin-pt ptB" x="508" y="322" width="20" height="20" /><g id="fin-q"><circle id="fin-qfill" cx="606" cy="508" r="17" class="q-ring"/><text id="fin-qt" class="q-txt" x="606" y="516" text-anchor="middle">?</text><text id="fin-ql" class="lbl" x="634" y="486"></text></g>
+    </svg>
+<div class="panel" id="fin-panel"><div class="pn-name" id="fin-name"><span class="fin-nw">Un</span> <span class="fin-nw">mismo</span> <span class="fin-nw">dato,</span> <span class="fin-nw">ocho</span> <span class="fin-nw">maneras</span> <span class="fin-nw">de</span> <span class="fin-nw">decidir</span></div><div class="pn-line" id="fin-line"><span class="fin-lw">Cada</span> <span class="fin-lw">modelo</span> <span class="fin-lw">traduce</span> <span class="fin-lw">los</span> <span class="fin-lw">datos</span> <span class="fin-lw">en</span> <span class="fin-lw">una</span> <span class="fin-lw">regla</span> <span class="fin-lw">distinta</span></div></div>
+  </div>
+  <script>
+
+const tl = gsap.timeline({ paused: true });
+const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#16232F';
+function panelIn(t0){
+  tl.fromTo('.fin-nw',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:0.13,stagger:0.067,ease:'power4.out'},t0);
+  if(document.getElementById('fin-aka')) tl.fromTo('#fin-aka',{opacity:0},{opacity:1,duration:0.3,ease:'power2.out'},t0+0.25);
+  tl.fromTo('.fin-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},t0+0.35);
+  if(document.getElementById('fin-math')) tl.fromTo('#fin-math',{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t0+0.9);
+}
+function out(sel,t){ tl.to(sel,{opacity:0,filter:'blur(8px)',duration:0.2,ease:'power3.in'},t); }
+function inn(sel,t,d=0.25){ tl.fromTo(sel,{opacity:0},{opacity:1,duration:d,ease:'power2.out'},t); }
+function blurIn(sel,t){ tl.fromTo(sel,{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t); }
+function drawLine(sel,t,x1,y1,x2,y2,d=0.5,ease='power2.inOut'){ tl.fromTo(sel,{attr:{x1,y1,x2:x1,y2:y1},opacity:1},{attr:{x2,y2},duration:d,ease},t); }
+function popQ(t, cls){ // the new data point receives the model's answer
+  tl.to('#fin-qfill',{attr:{r:19},fill:cls===1?'#B8642A':'#2B5D8C',stroke:'#0F7B6C',strokeWidth:5,duration:0.35,ease:'expo.out'},t);
+  tl.to('#fin-qt',{opacity:0,duration:0.1},t);
+}
+panelIn(0.1);
+popQ(0.3,1);
+
+window.__timelines["cierre"] = tl;
+  </script>
+</template>

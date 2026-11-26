@@ -1,0 +1,83 @@
+<template>
+  <style>
+#root{position:absolute;inset:0;background:var(--color-ground);overflow:hidden}
+.plane{position:absolute;left:0;top:0;width:1920px;height:1080px}
+.grid line{stroke:#D3DAE2;stroke-width:1}
+.axis{stroke:var(--color-ink);stroke-width:2.5}
+.tick{font:400 28px Lato;fill:#556677}
+.axt{font:italic 400 38px 'EB Garamond';fill:var(--color-ink)}
+.ptA{fill:var(--color-a);stroke:#fff;stroke-width:2}
+.ptB{fill:var(--color-b);stroke:#fff;stroke-width:2}
+.mdl{stroke:var(--color-ink);stroke-width:3;fill:none}
+.dash{stroke:var(--color-ink);stroke-width:2;stroke-dasharray:8 7;fill:none}
+.acc{stroke:var(--color-accent);stroke-width:3;fill:none}
+.accd{stroke:var(--color-accent);stroke-width:2.5;stroke-dasharray:8 7;fill:none}
+.regA{fill:var(--color-a);opacity:0}
+.regB{fill:var(--color-b);opacity:0}
+.lbl{font:400 28px Lato;fill:var(--color-ink)}
+.lblacc{font:700 30px Lato;fill:var(--color-accent)}
+.q-ring{fill:var(--color-ground);stroke:var(--color-ink);stroke-width:3}
+.q-txt{font:700 24px Lato;fill:var(--color-ink)}
+.panel{position:absolute;left:1060px;top:150px;width:740px;color:var(--color-ink)}
+.pn-name{font:700 56px Montserrat;letter-spacing:-0.01em;line-height:1.1}
+.pn-name span,.pn-line span{display:inline-block}
+.pn-aka{font:400 30px Lato;color:#556677;margin-top:12px}
+.pn-line{font:400 36px Lato;line-height:1.32;margin-top:30px}
+.pn-math{font:italic 400 42px 'EB Garamond';margin-top:26px}
+.out{position:absolute;left:1060px;top:640px;width:740px;height:300px;color:var(--color-ink);font:400 30px Lato}
+.dec{font:700 36px Montserrat;color:var(--color-accent)}
+.row{display:flex;align-items:center;gap:18px;height:46px}
+.sw{display:inline-block;width:18px;height:18px}
+.swA{background:var(--color-a);border-radius:50%}
+.swB{background:var(--color-b)}
+.bar{height:22px;background:var(--color-ink)}
+.mut{color:#556677}
+</style>
+  <div id="root" data-composition-id="boosting" data-width="1920" data-height="1080">
+    <svg class="plane" viewBox="0 0 1920 1080" width="1920" height="1080" xmlns="http://www.w3.org/2000/svg">
+      <defs><clipPath id="boosting-clip"><rect x="150" y="140" width="800" height="800"/></clipPath></defs>
+<g class="grid" id="s5-grid"><line class="s5-gl" x1="150" y1="940" x2="950" y2="940"/><line class="s5-gl" x1="150" y1="940" x2="150" y2="140"/><line class="s5-gl" x1="150" y1="860" x2="950" y2="860"/><line class="s5-gl" x1="230" y1="940" x2="230" y2="140"/><line class="s5-gl" x1="150" y1="780" x2="950" y2="780"/><line class="s5-gl" x1="310" y1="940" x2="310" y2="140"/><line class="s5-gl" x1="150" y1="700" x2="950" y2="700"/><line class="s5-gl" x1="390" y1="940" x2="390" y2="140"/><line class="s5-gl" x1="150" y1="620" x2="950" y2="620"/><line class="s5-gl" x1="470" y1="940" x2="470" y2="140"/><line class="s5-gl" x1="150" y1="540" x2="950" y2="540"/><line class="s5-gl" x1="550" y1="940" x2="550" y2="140"/><line class="s5-gl" x1="150" y1="460" x2="950" y2="460"/><line class="s5-gl" x1="630" y1="940" x2="630" y2="140"/><line class="s5-gl" x1="150" y1="380" x2="950" y2="380"/><line class="s5-gl" x1="710" y1="940" x2="710" y2="140"/><line class="s5-gl" x1="150" y1="300" x2="950" y2="300"/><line class="s5-gl" x1="790" y1="940" x2="790" y2="140"/><line class="s5-gl" x1="150" y1="220" x2="950" y2="220"/><line class="s5-gl" x1="870" y1="940" x2="870" y2="140"/><line class="s5-gl" x1="150" y1="140" x2="950" y2="140"/><line class="s5-gl" x1="950" y1="940" x2="950" y2="140"/></g><line class="axis" id="s5-ax" x1="150" y1="940" x2="950" y2="940"/><line class="axis" id="s5-ay" x1="150" y1="940" x2="150" y2="140"/><text class="tick" x="150" y="980" text-anchor="middle">0</text><text class="tick" x="310" y="980" text-anchor="middle">2</text><text class="tick" x="470" y="980" text-anchor="middle">4</text><text class="tick" x="630" y="980" text-anchor="middle">6</text><text class="tick" x="790" y="980" text-anchor="middle">8</text><text class="tick" x="950" y="980" text-anchor="middle">10</text><text class="tick" x="134" y="950" text-anchor="end">0</text><text class="tick" x="134" y="790" text-anchor="end">2</text><text class="tick" x="134" y="630" text-anchor="end">4</text><text class="tick" x="134" y="470" text-anchor="end">6</text><text class="tick" x="134" y="310" text-anchor="end">8</text><text class="tick" x="134" y="150" text-anchor="end">10</text><text class="axt" id="s5-xt" x="974" y="952">x₁</text><text class="axt" id="s5-yt" x="138" y="114" text-anchor="middle">x₂</text><g id="s5-reg0" class=""><rect class="regA" x="150" y="140" width="452" height="800"/><rect class="regB" x="602" y="140" width="348" height="800"/></g><g id="s5-reg1" class=""><rect class="regA" x="150" y="140" width="360" height="800"/><rect class="regA" x="510" y="140" width="92.00000000000003" height="800"/><rect class="regB" x="602" y="140" width="348" height="800"/></g><g id="s5-reg2" class=""><rect class="regA" x="150" y="472" width="360" height="468"/><rect class="regA" x="150" y="140" width="360" height="332"/><rect class="regA" x="510" y="472" width="92.00000000000003" height="468"/><rect class="regA" x="510" y="140" width="92.00000000000003" height="332"/><rect class="regB" x="602" y="472" width="348" height="468"/><rect class="regB" x="602" y="140" width="348" height="332"/></g><line id="s5-st0" class="mdl" x1="602" y1="140" x2="602" y2="140" data-x2="602" data-y2="940"/><line id="s5-st1" class="mdl" x1="510" y1="140" x2="510" y2="140" data-x2="510" data-y2="940"/><line id="s5-st2" class="mdl" x1="150" y1="472" x2="150" y2="472" data-x2="950" data-y2="472"/><circle id="s5-p0" class="s5-pt ptA" cx="246" cy="780" r="11" /><circle id="s5-p1" class="s5-pt ptA" cx="318" cy="852" r="11" /><circle id="s5-p2" class="s5-pt ptA" cx="278" cy="652" r="11" /><circle id="s5-p3" class="s5-pt ptA" cx="382" cy="732" r="11" /><circle id="s5-p4" class="s5-pt ptA" cx="422" cy="828" r="11" /><circle id="s5-p5" class="s5-pt ptA" cx="222" cy="556" r="11" /><circle id="s5-p6" class="s5-pt ptA" cx="358" cy="588" r="11" /><circle id="s5-p7" class="s5-pt ptA" cx="462" cy="676" r="11" /><circle id="s5-p8" class="s5-pt ptA" cx="502" cy="780" r="11" /><circle id="s5-p9" class="s5-pt ptA" cx="406" cy="492" r="11" /><circle id="s5-p10" class="s5-pt ptA" cx="526" cy="612" r="11" /><circle id="s5-p11" class="s5-pt ptA" cx="598" cy="716" r="11" /><circle id="s5-p12" class="s5-pt ptA" cx="558" cy="532" r="11" /><rect id="s5-p13" class="s5-pt ptB" x="828" y="258" width="20" height="20" /><rect id="s5-p14" class="s5-pt ptB" x="732" y="218" width="20" height="20" /><rect id="s5-p15" class="s5-pt ptB" x="852" y="378" width="20" height="20" /><rect id="s5-p16" class="s5-pt ptB" x="668" y="338" width="20" height="20" /><rect id="s5-p17" class="s5-pt ptB" x="772" y="442" width="20" height="20" /><rect id="s5-p18" class="s5-pt ptB" x="876" y="218" width="20" height="20" /><rect id="s5-p19" class="s5-pt ptB" x="612" y="242" width="20" height="20" /><rect id="s5-p20" class="s5-pt ptB" x="692" y="482" width="20" height="20" /><rect id="s5-p21" class="s5-pt ptB" x="812" y="538" width="20" height="20" /><rect id="s5-p22" class="s5-pt ptB" x="596" y="402" width="20" height="20" /><rect id="s5-p23" class="s5-pt ptB" x="636" y="554" width="20" height="20" /><rect id="s5-p24" class="s5-pt ptB" x="748" y="618" width="20" height="20" /><rect id="s5-p25" class="s5-pt ptB" x="508" y="322" width="20" height="20" /><circle id="s5-w0" cx="518" cy="332" r="22" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-dasharray="5 5" opacity="0"/><circle id="s5-w1" cx="518" cy="332" r="22" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-dasharray="5 5" opacity="0"/><circle id="s5-w2" cx="518" cy="332" r="22" fill="none" stroke="var(--color-ink)" stroke-width="2" stroke-dasharray="5 5" opacity="0"/><g id="s5-q"><circle id="s5-qfill" cx="606" cy="508" r="17" class="q-ring"/><text id="s5-qt" class="q-txt" x="606" y="516" text-anchor="middle">?</text><text id="s5-ql" class="lbl" x="634" y="486"></text></g>
+    </svg>
+<div class="panel" id="s5-panel"><div class="pn-name" id="s5-name"><span class="s5-nw">Gradient</span> <span class="s5-nw">Boosting</span></div><div class="pn-aka" id="s5-aka">XGBoost · LightGBM · CatBoost</div><div class="pn-line" id="s5-line"><span class="s5-lw">Cada</span> <span class="s5-lw">árbol</span> <span class="s5-lw">nuevo</span> <span class="s5-lw">corrige</span> <span class="s5-lw">el</span> <span class="s5-lw">error</span> <span class="s5-lw">que</span> <span class="s5-lw">dejó</span> <span class="s5-lw">el</span> <span class="s5-lw">anterior</span></div><div class="pn-math" id="s5-math">F<sub>m</sub>(x) = F<sub>m−1</sub>(x) + η · h<sub>m</sub>(x)</div></div><div class="out" id="s5-out"><div class="row" id="s5-l0"><span style="width:150px">Inicio</span><span class="bar" id="s5-b0" style="width:300px"></span><span>pérdida 6.50</span></div><div class="row" id="s5-l1"><span style="width:150px">Árbol 1</span><span class="bar" id="s5-b1" style="width:84px"></span><span>pérdida 1.82</span></div><div class="row" id="s5-l2"><span style="width:150px">Árbol 2</span><span class="bar" id="s5-b2" style="width:47px"></span><span>pérdida 1.01</span></div><div class="row" id="s5-l3"><span style="width:150px">Árbol 3</span><span class="bar" id="s5-b3" style="width:31px"></span><span>pérdida 0.68</span></div><div class="dec" id="s5-dec" style="margin-top:22px">F(x) = 0.84 ≥ 0.5 → Clase B</div></div>
+  </div>
+  <script>
+
+const tl = gsap.timeline({ paused: true });
+const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#16232F';
+function panelIn(t0){
+  tl.fromTo('.s5-nw',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:0.13,stagger:0.067,ease:'power4.out'},t0);
+  if(document.getElementById('s5-aka')) tl.fromTo('#s5-aka',{opacity:0},{opacity:1,duration:0.3,ease:'power2.out'},t0+0.25);
+  tl.fromTo('.s5-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},t0+0.35);
+  if(document.getElementById('s5-math')) tl.fromTo('#s5-math',{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t0+0.9);
+}
+function out(sel,t){ tl.to(sel,{opacity:0,filter:'blur(8px)',duration:0.2,ease:'power3.in'},t); }
+function inn(sel,t,d=0.25){ tl.fromTo(sel,{opacity:0},{opacity:1,duration:d,ease:'power2.out'},t); }
+function blurIn(sel,t){ tl.fromTo(sel,{opacity:0,filter:'blur(8px)'},{opacity:1,filter:'blur(0px)',duration:0.18,ease:'power4.out'},t); }
+function drawLine(sel,t,x1,y1,x2,y2,d=0.5,ease='power2.inOut'){ tl.fromTo(sel,{attr:{x1,y1,x2:x1,y2:y1},opacity:1},{attr:{x2,y2},duration:d,ease},t); }
+function popQ(t, cls){ // the new data point receives the model's answer
+  tl.to('#s5-qfill',{attr:{r:19},fill:cls===1?'#B8642A':'#2B5D8C',stroke:'#0F7B6C',strokeWidth:5,duration:0.35,ease:'expo.out'},t);
+  tl.to('#s5-qt',{opacity:0,duration:0.1},t);
+}
+panelIn(0.05);
+
+inn('#s5-l0',0.8);tl.fromTo('#s5-b0',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.4,ease:'expo.out'},0.8);
+drawLine('#s5-st0',1.25,602,140,602,940,0.45);
+tl.fromTo('#s5-reg0 rect',{opacity:0},{opacity:0.16,duration:0.3},1.55);
+tl.fromTo('#s5-w0',{opacity:0},{opacity:1,duration:0.2},1.70);
+inn('#s5-l1',1.70);tl.fromTo('#s5-b1',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.4,ease:'expo.out'},1.70);
+tl.to('#s5-st0',{opacity:0.28,duration:0.2},2.2);tl.to('#s5-reg0 rect',{opacity:0,duration:0.25},2.5);tl.to('#s5-w0',{opacity:0,duration:0.2},2.2);
+drawLine('#s5-st1',2.2,510,140,510,940,0.45);
+tl.fromTo('#s5-reg1 rect',{opacity:0},{opacity:0.16,duration:0.3},2.50);
+tl.fromTo('#s5-w1',{opacity:0},{opacity:1,duration:0.2},2.65);
+inn('#s5-l2',2.65);tl.fromTo('#s5-b2',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.4,ease:'expo.out'},2.65);
+tl.to('#s5-st1',{opacity:0.28,duration:0.2},3.15);tl.to('#s5-reg1 rect',{opacity:0,duration:0.25},3.4499999999999997);tl.to('#s5-w1',{opacity:0,duration:0.2},3.15);
+drawLine('#s5-st2',3.15,150,472,950,472,0.45);
+tl.fromTo('#s5-reg2 rect',{opacity:0},{opacity:0.16,duration:0.3},3.45);
+tl.fromTo('#s5-w2',{opacity:0},{opacity:1,duration:0.2},3.60);
+inn('#s5-l3',3.60);tl.fromTo('#s5-b3',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.4,ease:'expo.out'},3.60);
+popQ(4.5,1);blurIn('#s5-dec',4.5);
+out(['#s5-panel','#s5-out','[id^="s5-reg"]','[id^="s5-st"]','[id^="s5-w"]','#s5-q'],6.28);
+
+window.__timelines["boosting"] = tl;
+  </script>
+</template>
