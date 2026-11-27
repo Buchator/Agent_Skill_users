@@ -554,7 +554,7 @@ const root = `<!doctype html>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="${t}" data-width="1920" data-height="1080">
-${hosts}      <audio id="voz" class="clip" src="assets/voice/narracion.wav" data-start="0" data-duration="${VOICE_LEN}" data-track-index="4" data-volume="1"></audio>
+${hosts}      <audio id="voz" class="clip" src="assets/voice/narracion.wav" data-start="0" data-duration="${VOICE_LEN}" data-track-index="4" data-volume="0.7"></audio>
 ${audio}    </div>
     <script>
       window.__timelines = window.__timelines || {};
