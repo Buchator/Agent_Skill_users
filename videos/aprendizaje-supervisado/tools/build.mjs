@@ -13,8 +13,9 @@ const f2 = (v) => v.toFixed(2);
 // ---------- timing ----------
 const INTRO = 3.5, SCENE = 6.5, OUTRO = 3.5; // the choreography is authored on these lengths...
 // ...then mapped onto the narration: the voice is the clock.
-const VS = JSON.parse(fs.readFileSync(new URL('./voice_sections.json', import.meta.url)));
-const VOICE_LEN = 113.72, LEAD = 0.4, TAIL = 2.2;
+const VSJ = JSON.parse(fs.readFileSync(new URL('./voice_sections.json', import.meta.url)));
+const VS = VSJ.sections;
+const VOICE_LEN = VSJ.total, LEAD = 0.4, TAIL = 2.2;
 const KEYS = ['intro', 'lineal', 'logistica', 'arbol', 'bosque', 'boosting', 'svm', 'knn', 'bayes', 'cierre'];
 const PKEY = { in: 'intro', s1: 'lineal', s2: 'logistica', s3: 'arbol', s4: 'bosque', s5: 'boosting', s6: 'svm', s7: 'knn', s8: 'bayes', fin: 'cierre' };
 const START = {}, DUR = {};
