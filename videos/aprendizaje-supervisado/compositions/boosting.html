@@ -43,7 +43,7 @@
   <script>
 
 const _tl = gsap.timeline({ paused: true });
-const _A = [[0,0],[1.25,3.02],[2.2,6.01],[3.15,7.33],[4.5,8.06],[6.28,10.86],[6.5,11.08]];
+const _A = [[0,0],[1.25,3.11],[2.2,5.97],[3.15,7.33],[4.5,8.02],[6.28,11.03],[6.5,11.25]];
 const M = (t) => { for (let i = 1; i < _A.length; i++) if (t <= _A[i][0]) { const a = _A[i - 1], b = _A[i]; return a[1] + (t - a[0]) * (b[1] - a[1]) / (b[0] - a[0]); } return t; };
 const P = (t) => (typeof t === 'number' ? M(t) : t);
 const tl = { to: (a, b, t) => _tl.to(a, b, P(t)), fromTo: (a, b, c, t) => _tl.fromTo(a, b, c, P(t)), set: (a, b, t) => _tl.set(a, b, P(t)) };
