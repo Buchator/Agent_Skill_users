@@ -11,7 +11,43 @@ const Y = (y) => +(PY0 - S * y).toFixed(1);
 const f2 = (v) => v.toFixed(2);
 
 // ---------- timing ----------
-const INTRO = 3.5, SCENE = 6.5, OUTRO = 3.5;
+const INTRO = 3.5, SCENE = 6.5, OUTRO = 3.5; // the choreography is authored on these lengths...
+// ...then mapped onto the narration: the voice is the clock.
+const VS = JSON.parse(fs.readFileSync(new URL('./voice_sections.json', import.meta.url)));
+const VOICE_LEN = 113.72, LEAD = 0.4, TAIL = 2.2;
+const KEYS = ['intro', 'lineal', 'logistica', 'arbol', 'bosque', 'boosting', 'svm', 'knn', 'bayes', 'cierre'];
+const PKEY = { in: 'intro', s1: 'lineal', s2: 'logistica', s3: 'arbol', s4: 'bosque', s5: 'boosting', s6: 'svm', s7: 'knn', s8: 'bayes', fin: 'cierre' };
+const START = {}, DUR = {};
+KEYS.forEach((k, i) => { START[k] = i === 0 ? 0 : +(VS[i].start - LEAD).toFixed(2); });
+KEYS.forEach((k, i) => { const next = i < KEYS.length - 1 ? START[KEYS[i + 1]] : VOICE_LEN + TAIL; DUR[k] = +(next - START[k]).toFixed(2); });
+const norm = (w) => w.toLowerCase().replace(/[.,:;¿?¡!]/g, '');
+function wordAt(key, word, after = 0) {
+  const i = KEYS.indexOf(key);
+  for (const [w, t] of VS[i].words) { const lt = t - START[key]; if (norm(w) === norm(word) && lt >= after) return lt; }
+  throw new Error(`word "${word}" not found in ${key}`);
+}
+// [authored time, the narrated word it lands on]
+const ANCHOR_WORDS = {
+  intro: [[0.6, 'casos'], [0.9, 'respuesta'], [1.15, 'eso'], [1.3, 'veamos']],
+  lineal: [[0.9, 'traza'], [1.9, 'cerca'], [3.9, 'número'], [4.95, 'cuánto']],
+  logistica: [[1.0, 'probabilidad'], [2.3, 'pague'], [3.1, 'dice'], [4.4, 'ochenta']],
+  arbol: [[1.1, 'preguntas'], [2.4, 'cuestionario'], [3.9, 'grupos'], [4.3, 'nuestro']],
+  bosque: [[0.7, 'entrena'], [3.0, 'votan'], [4.3, 'aquí']],
+  boosting: [[1.25, 'uno'], [2.2, 'errores'], [3.15, 'corrige'], [4.5, 'así']],
+  svm: [[1.0, 'calle'], [1.5, 'ancha'], [3.1, 'borde'], [3.9, 'nuevo'], [4.4, 'clasifica']],
+  knn: [[0.9, 'busca'], [2.0, 'cinco'], [2.5, 'mira'], [4.2, 'tres']],
+  bayes: [[0.9, 'calcula'], [1.5, 'separado'], [2.7, 'probabilidad'], [4.2, 'ochenta']],
+  cierre: [[1.0, 'aprenden'], [1.6, 'eso']],
+};
+const ANCH = {};
+for (const k of KEYS) {
+  const old = k === 'intro' ? INTRO : k === 'cierre' ? OUTRO : SCENE;
+  const a = [[0, 0]]; let last = 0;
+  for (const [o, w] of ANCHOR_WORDS[k]) { const wt = wordAt(k, w, last); const nt = Math.max(wt - 0.15, a[a.length - 1][1] + 0.2); a.push([o, +nt.toFixed(2)]); last = wt; }
+  a.push([old - 0.22, +(DUR[k] - 0.22).toFixed(2)]); a.push([old, DUR[k]]);
+  ANCH[k] = a;
+}
+const mapT = (k, t) => { const a = ANCH[k]; for (let i = 1; i < a.length; i++) if (t <= a[i][0]) { const [o0, n0] = a[i - 1], [o1, n1] = a[i]; return +(n0 + (t - o0) * (n1 - n0) / (o1 - o0)).toFixed(3); } return t; };
 
 // ---------- shared CSS (identical in every scene file) ----------
 const CSS = `
@@ -58,14 +94,14 @@ function grid(p, { draw = false } = {}) {
   }
   return g + '</g>';
 }
-function axes(p, { xt = 'x₁', yt = 'x₂', yTicks = null } = {}) {
+function axes(p, { xt = 'ingresos', yt = 'historial de pagos', yTicks = null } = {}) {
   let s = `<line class="axis" id="${p}-ax" x1="${X(0)}" y1="${Y(0)}" x2="${X(10)}" y2="${Y(0)}"/>`;
   s += `<line class="axis" id="${p}-ay" x1="${X(0)}" y1="${Y(0)}" x2="${X(0)}" y2="${Y(10)}"/>`;
   for (let i = 0; i <= 10; i += 2) s += `<text class="tick" x="${X(i)}" y="${Y(0) + 40}" text-anchor="middle">${i}</text>`;
   const yt2 = yTicks || [0, 2, 4, 6, 8, 10].map((v) => [v, String(v)]);
   for (const [v, t] of yt2) s += `<text class="tick" x="${X(0) - 16}" y="${Y(v) + 10}" text-anchor="end">${t}</text>`;
   s += `<text class="axt" id="${p}-xt" x="${X(10) + 24}" y="${Y(0) + 12}">${xt}</text>`;
-  s += `<text class="axt" id="${p}-yt" x="${X(0) - 12}" y="${Y(10) - 26}" text-anchor="middle">${yt}</text>`;
+  s += `<text class="axt" id="${p}-yt" x="${X(0) - 40}" y="${Y(10) - 26}">${yt}</text>`;
   return s;
 }
 function mark(id, cls, x, y, c, extra = '') {
@@ -73,7 +109,9 @@ function mark(id, cls, x, y, c, extra = '') {
     ? `<circle id="${id}" class="${cls} ptA" cx="${X(x)}" cy="${Y(y)}" r="11" ${extra}/>`
     : `<rect id="${id}" class="${cls} ptB" x="${X(x) - 10}" y="${Y(y) - 10}" width="20" height="20" ${extra}/>`;
 }
-const pts2d = (p) => D.pts.map((q, i) => mark(`${p}-p${i}`, `${p}-pt`, q.x, q.y, q.c)).join('');
+const legend = (p) => `<g id="${p}-leg"><circle cx="${X(10) - 250}" cy="${Y(10) - 36}" r="11" class="ptA"/><text class="lbl" x="${X(10) - 232}" y="${Y(10) - 26}">no pagó</text>`
+  + `<rect x="${X(10) - 100}" y="${Y(10) - 46}" width="20" height="20" class="ptB"/><text class="lbl" x="${X(10) - 70}" y="${Y(10) - 26}">pagó</text></g>`;
+const pts2d = (p) => legend(p) + D.pts.map((q, i) => mark(`${p}-p${i}`, `${p}-pt`, q.x, q.y, q.c)).join('');
 function qMark(p, x, y, label = '') {
   return `<g id="${p}-q"><circle id="${p}-qfill" cx="${X(x)}" cy="${Y(y)}" r="17" class="q-ring"/>`
     + `<text id="${p}-qt" class="q-txt" x="${X(x)}" y="${Y(y) + 8}" text-anchor="middle">?</text>`
@@ -90,7 +128,11 @@ function panel(p, { name, aka = '', line, math = '' }) {
 }
 // timeline helpers emitted into each scene
 const HELPERS = (p, dur, { keepPlane = true } = {}) => `
-const tl = gsap.timeline({ paused: true });
+const _tl = gsap.timeline({ paused: true });
+const _A = ${JSON.stringify(ANCH[PKEY[p]])};
+const M = (t) => { for (let i = 1; i < _A.length; i++) if (t <= _A[i][0]) { const a = _A[i - 1], b = _A[i]; return a[1] + (t - a[0]) * (b[1] - a[1]) / (b[0] - a[0]); } return t; };
+const P = (t) => (typeof t === 'number' ? M(t) : t);
+const tl = { to: (a, b, t) => _tl.to(a, b, P(t)), fromTo: (a, b, c, t) => _tl.fromTo(a, b, c, P(t)), set: (a, b, t) => _tl.set(a, b, P(t)) };
 const ink = getComputedStyle(document.documentElement).getPropertyValue('--color-ink').trim() || '#16232F';
 function panelIn(t0){
   tl.fromTo('.${p}-nw',{opacity:0,filter:'blur(6px)'},{opacity:1,filter:'blur(0px)',duration:0.13,stagger:0.067,ease:'power4.out'},t0);
@@ -107,7 +149,7 @@ function popQ(t, cls){ // the new data point receives the model's answer
   tl.to('#${p}-qt',{opacity:0,duration:0.1},t);
 }
 `;
-const END = (key) => `window.__timelines["${key}"] = tl;`;
+const END = (key) => `window.__timelines["${key}"] = _tl;`;
 
 function sceneFile(key, dur, svg, html, script) {
   return `<template>
@@ -132,23 +174,28 @@ const scenes = [];
 // ================= INTRO =================
 {
   const p = 'in', Q = D.Q;
-  const svg = grid(p) + axes(p, { xt: '', yt: '' }) + qMark(p, Q.x, Q.y, 'dato nuevo');
-  const html = panel(p, { name: 'Aprendizaje supervisado', line: '¿Cómo decide cada modelo ante un dato nuevo?' });
+  const svg = grid(p) + axes(p, { xt: '', yt: '' }) + pts2d(p) + qMark(p, Q.x, Q.y, 'caso nuevo');
+  const html = panel(p, { name: 'Aprendizaje supervisado', line: '¿Cómo decide una IA si aprueba un crédito?' });
   const js = HELPERS(p, INTRO) + `
 tl.fromTo('.${p}-nw',{opacity:1},{opacity:1,duration:0.01},0); // title is on screen from frame 0 (thumbnail)
-tl.fromTo('.${p}-gl',{opacity:0},{opacity:1,duration:0.4,stagger:0.02,ease:'power2.out'},0.05);
-tl.fromTo('.${p}-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},0.5);
+tl.fromTo('.${p}-gl',{opacity:0},{opacity:1,duration:0.4,stagger:0.12,ease:'power2.out'},0.05);
+tl.fromTo('.${p}-lw',{color:'#B4BFCA'},{color:ink,duration:0.2,stagger:0.08,ease:'none'},1.15);
+// past cases arrive without an answer, then their known outcome colours them
+tl.fromTo('.${p}-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%',fill:'#9AA7B4'},{opacity:1,scale:1,duration:0.4,stagger:0.03,ease:'expo.out'},0.6);
+tl.fromTo('.${p}-pt.ptA',{fill:'#9AA7B4'},{fill:'#2B5D8C',duration:0.4,stagger:0.02,ease:'power2.inOut'},0.9);
+tl.fromTo('.${p}-pt.ptB',{fill:'#9AA7B4'},{fill:'#B8642A',duration:0.4,stagger:0.02,ease:'power2.inOut'},0.95);
+inn('#${p}-leg',0.95,0.3);
 tl.fromTo('#${p}-q',{opacity:0,scale:0.4,svgOrigin:'${X(Q.x)} ${Y(Q.y)}'},{opacity:1,scale:1,svgOrigin:'${X(Q.x)} ${Y(Q.y)}',duration:0.6,ease:'expo.out'},1.3);
-out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
+out(['#${p}-panel','#${p}-q','.${p}-pt','#${p}-leg'], ${INTRO - 0.22});
 `;
-  scenes.push({ key: 'intro', dur: INTRO, file: sceneFile('intro', INTRO, svg, html, js), decision: null });
+  scenes.push({ key: 'intro', dur: DUR['intro'], file: sceneFile('intro', INTRO, svg, html, js), decision: null });
 }
 
 // ================= 1. LINEAR REGRESSION =================
 {
   const p = 's1', L = D.linear;
   const yAt = (c0, c1, x) => c0 + c1 * x;
-  let svg = grid(p) + axes(p, { xt: 'x', yt: 'y' });
+  let svg = grid(p) + axes(p, { xt: 'ingresos', yt: 'cuota' });
   svg += `<g clip-path="url(#s1-clip)">`;
   L.points.forEach((q, i) => { svg += `<line id="${p}-r${i}" class="dash" x1="${X(q.x)}" y1="${Y(q.y)}" x2="${X(q.x)}" y2="${Y(L.mean)}" opacity="0"/>`; });
   svg += `<line id="${p}-fit" class="mdl" x1="${X(0)}" y1="${Y(L.mean)}" x2="${X(0)}" y2="${Y(L.mean)}"/></g>`;
@@ -163,7 +210,7 @@ out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
     + `<div class="out" id="${p}-out">
       <div class="row" id="${p}-sse0"><span>Σ (y − ŷ)² =</span><b>${L.sseStart.toFixed(1)}</b><span class="mut">recta inicial</span></div>
       <div class="row" id="${p}-sse1"><span>Σ (y − ŷ)² =</span><b>${L.sseFit.toFixed(1)}</b><span class="mut">mínimo: ŷ = ${f2(L.b0)} + ${f2(L.b1)}x</span></div>
-      <div class="dec" id="${p}-dec" style="margin-top:34px">Predice un valor: ŷ = ${f2(L.newY)}</div></div>`;
+      <div class="dec" id="${p}-dec" style="margin-top:34px">Predice la cuota: ŷ = ${f2(L.newY)}</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `tl.fromTo('.${p}-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,stagger:0.04,ease:'expo.out'},0.1);\n`;
   js += `drawLine('#${p}-fit',0.9,${X(0)},${Y(L.mean)},${X(10)},${Y(L.mean)},0.5);\n`;
@@ -180,7 +227,7 @@ out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
   js += `drawLine('#${p}-hy',4.6,${X(L.newX)},${Y(L.newY)},${X(0)},${Y(L.newY)},0.45);\n`;
   js += `inn('#${p}-yl',4.95,0.2);\nblurIn('#${p}-dec',4.95);\n`;
   js += `out(['#${p}-panel','#${p}-out','#${p}-fit','[id^="${p}-r"]','.${p}-pt','#${p}-vx','#${p}-hy','#${p}-yp','#${p}-yl','#${p}-xl','#${p}-xt','#${p}-yt'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'lineal', dur: SCENE, file: sceneFile('lineal', SCENE, svg, html, js), decision: 4.95 });
+  scenes.push({ key: 'lineal', dur: DUR['lineal'], file: sceneFile('lineal', SCENE, svg, html, js), decision: mapT('lineal', 4.95) });
 }
 
 // ================= 2. LOGISTIC REGRESSION =================
@@ -188,7 +235,7 @@ out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
   const p = 's2', G = D.logistic;
   const pY = (pr) => 1 + 8 * pr; // probability 0..1 -> plane y 1..9
   const sig = (x) => 1 / (1 + Math.exp(-(G.w0 + G.w1 * x)));
-  let svg = grid(p) + axes(p, { xt: 'x', yt: 'P(B)', yTicks: [[1, '0'], [5, '0.5'], [9, '1']] });
+  let svg = grid(p) + axes(p, { xt: 'historial', yt: 'P(paga)', yTicks: [[1, '0'], [5, '0.5'], [9, '1']] });
   let d = '';
   for (let i = 0; i <= 100; i++) { const x = i / 10; d += (i ? 'L' : 'M') + X(x) + ' ' + Y(pY(sig(x))) + ' '; }
   svg += `<line id="${p}-thr" class="dash" x1="${X(0)}" y1="${Y(5)}" x2="${X(0)}" y2="${Y(5)}"/>`;
@@ -202,12 +249,12 @@ out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
   svg += `<text id="${p}-pl" class="lblacc" x="${X(0) + 14}" y="${Y(pY(G.p)) - 14}" opacity="0">p = ${f2(G.p)}</text>`;
   const html = panel(p, { name: 'Regresión logística', aka: 'Ajuste por máxima verosimilitud (log-loss)', line: 'Convierte una suma lineal en probabilidad con la sigmoide', math: 'p = 1 / (1 + e<sup>−(β₀ + β₁x)</sup>)' })
     + `<div class="out" id="${p}-out">
-      <div class="row" id="${p}-r0"><span class="sw swA"></span><span>clase A → p = 0</span><span class="sw swB" style="margin-left:24px"></span><span>clase B → p = 1</span></div>
-      <div class="dec" id="${p}-dec" style="margin-top:40px">p = ${f2(G.p)} &gt; 0.5 → Clase B</div></div>`;
+      <div class="row" id="${p}-r0"><span class="sw swA"></span><span>no pagó → p = 0</span><span class="sw swB" style="margin-left:24px"></span><span>pagó → p = 1</span></div>
+      <div class="dec" id="${p}-dec" style="margin-top:40px">p = ${f2(G.p)} &gt; 0.5 → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `tl.fromTo('.${p}-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,stagger:0.04,ease:'expo.out'},0.1);\n`;
   js += `inn('#${p}-r0',0.8);\n`;
-  js += `tl.fromTo('#${p}-sig',{strokeDashoffset:1},{strokeDashoffset:0,duration:1.3,ease:'power2.inOut'},1.0);\n`;
+  js += `tl.fromTo('#${p}-sig',{strokeDashoffset:1},{strokeDashoffset:0,duration:2.0,ease:'power2.inOut'},1.0);\n`;
   js += `drawLine('#${p}-thr',2.3,${X(0)},${Y(5)},${X(10)},${Y(5)},0.5);\ninn('#${p}-thl',2.6,0.2);\n`;
   js += `inn('#${p}-xl',3.1,0.2);\n`;
   js += `drawLine('#${p}-vx',3.2,${X(G.newX)},${Y(0)},${X(G.newX)},${Y(pY(G.p))},0.55);\n`;
@@ -215,7 +262,7 @@ out(['#${p}-panel','#${p}-q'], ${INTRO - 0.22});
   js += `drawLine('#${p}-hy',3.85,${X(G.newX)},${Y(pY(G.p))},${X(0)},${Y(pY(G.p))},0.45);\n`;
   js += `inn('#${p}-pl',4.2,0.2);\nblurIn('#${p}-dec',4.4);\n`;
   js += `out(['#${p}-panel','#${p}-out','#${p}-sig','#${p}-thr','#${p}-thl','.${p}-pt','#${p}-vx','#${p}-hy','#${p}-pp','#${p}-pl','#${p}-xl','#${p}-xt','#${p}-yt'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'logistica', dur: SCENE, file: sceneFile('logistica', SCENE, svg, html, js), decision: 4.4 });
+  scenes.push({ key: 'logistica', dur: DUR['logistica'], file: sceneFile('logistica', SCENE, svg, html, js), decision: mapT('logistica', 4.4) });
 }
 
 // ---------- region helpers ----------
@@ -232,23 +279,23 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   const right = T.rects.filter((r) => r.x0 >= s1.t - 1e-9), left = T.rects.filter((r) => r.x1 <= s1.t + 1e-9);
   svg += rectsSvg(`${p}-reg1`, right) + rectsSvg(`${p}-reg2`, left);
   svg += splitSvg(`${p}-sp1`, s1) + splitSvg(`${p}-sp2`, s2);
-  svg += `<text id="${p}-sl1" class="lbl" x="${X(s1.t) + 10}" y="${Y(10) + 34}" opacity="0">x₁ = ${s1.t}</text>`;
-  svg += `<text id="${p}-sl2" class="lbl" x="${X(0) + 12}" y="${Y(s2.t) - 12}" opacity="0">x₂ = ${s2.t}</text>`;
-  svg += pts2d(p) + qMark(p, Q.x, Q.y, 'dato nuevo');
+  svg += `<text id="${p}-sl1" class="lbl" x="${X(s1.t) + 10}" y="${Y(10) + 34}" opacity="0">ingresos = ${s1.t}</text>`;
+  svg += `<text id="${p}-sl2" class="lbl" x="${X(0) + 12}" y="${Y(s2.t) - 12}" opacity="0">historial = ${s2.t}</text>`;
+  svg += pts2d(p) + qMark(p, Q.x, Q.y, 'caso nuevo');
   // small tree diagram in the panel
-  const node = (id, x, y, text, w = 230) => `<g id="${id}"><rect x="${x - w / 2}" y="${y - 26}" width="${w}" height="52" rx="4" fill="var(--color-ground)" stroke="var(--color-ink)" stroke-width="2"/><text x="${x}" y="${y + 10}" text-anchor="middle" class="lbl">${text}</text></g>`;
-  const leaf = (id, x, y, c) => `<g id="${id}">${c ? `<rect x="${x - 18}" y="${y - 18}" width="36" height="36" fill="var(--color-b)"/>` : `<circle cx="${x}" cy="${y}" r="19" fill="var(--color-a)"/>`}<text x="${x + 30}" y="${y + 10}" class="lbl">${c ? 'B' : 'A'}</text></g>`;
+  const node = (id, x, y, text, w = 270) => `<g id="${id}"><rect x="${x - w / 2}" y="${y - 26}" width="${w}" height="52" rx="4" fill="var(--color-ground)" stroke="var(--color-ink)" stroke-width="2"/><text x="${x}" y="${y + 10}" text-anchor="middle" class="lbl">${text}</text></g>`;
+  const leaf = (id, x, y, c) => `<g id="${id}">${c ? `<rect x="${x - 18}" y="${y - 18}" width="36" height="36" fill="var(--color-b)"/>` : `<circle cx="${x}" cy="${y}" r="19" fill="var(--color-a)"/>`}<text x="${x + 30}" y="${y + 10}" class="lbl">${c ? 'Paga' : 'No paga'}</text></g>`;
   const edge = (id, x1, y1, x2, y2, t, tx, ty) => `<line id="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--color-ink)" stroke-width="2"/><text id="${id}t" x="${tx}" y="${ty}" class="lbl" fill="#556677">${t}</text>`;
   const tree = `<svg id="${p}-tree" width="740" height="300" viewBox="0 0 740 300" style="position:absolute;left:0;top:0">
     ${edge(`${p}-e1`, 330, 52, 190, 128, 'sí', 225, 84)}${edge(`${p}-e2`, 370, 52, 560, 132, 'no', 480, 84)}
     ${edge(`${p}-e3`, 160, 180, 90, 238, 'sí', 90, 206)}${edge(`${p}-e4`, 220, 180, 300, 238, 'no', 272, 206)}
-    ${node(`${p}-n0`, 350, 30, `x₁ &lt; ${s1.t}`)}${node(`${p}-n1`, 190, 154, `x₂ &lt; ${s2.t}`)}
+    ${node(`${p}-n0`, 350, 30, `ingresos &lt; ${s1.t}`)}${node(`${p}-n1`, 190, 154, `historial &lt; ${s2.t}`)}
     ${leaf(`${p}-l1`, 560, 154, T.root.r.c)}${leaf(`${p}-l2`, 90, 262, T.root.l.l.c)}${leaf(`${p}-l3`, 300, 262, T.root.l.r.c)}
   </svg>`;
   const html = panel(p, { name: 'Árbol de decisión', line: 'Corta el plano donde los grupos quedan más puros', math: 'Gini = 1 − Σ p<sub>k</sub>²' })
     + `<div class="out" id="${p}-out" style="top:560px">${tree}
       <div class="row" id="${p}-gini" style="position:absolute;left:420px;top:236px;white-space:nowrap"><span class="mut">Gini</span><b id="${p}-g0">${f2(T.root.gParent)}</b><span id="${p}-g1">→ ${f2(T.root.g)}</span><span id="${p}-g2">→ 0.00</span></div>
-      <div class="dec" id="${p}-dec" style="position:absolute;left:0;top:318px">x₁ = ${Q.x} ≥ ${s1.t} → Clase B</div></div>`;
+      <div class="dec" id="${p}-dec" style="position:absolute;left:0;top:318px">ingresos ${Q.x} ≥ ${s1.t} → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `tl.fromTo('.${p}-pt',{opacity:0,scale:0.3,transformOrigin:'50% 50%'},{opacity:1,scale:1,duration:0.4,stagger:0.025,ease:'expo.out'},0.1);\n`;
   js += `tl.fromTo('#${p}-q',{opacity:0,scale:0.4,svgOrigin:'${X(Q.x)} ${Y(Q.y)}'},{opacity:1,scale:1,svgOrigin:'${X(Q.x)} ${Y(Q.y)}',duration:0.5,ease:'expo.out'},0.7);\n`;
@@ -264,7 +311,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   js += `popQ(4.3,1);blurIn('#${p}-dec',4.3);\n`;
   js += `\n`;
   js += `out(['#${p}-panel','#${p}-out','#${p}-reg1','#${p}-reg2','#${p}-sp1','#${p}-sp2','#${p}-sl1','#${p}-sl2','#${p}-q'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'arbol', dur: SCENE, file: sceneFile('arbol', SCENE, svg, html, js), decision: 4.3 });
+  scenes.push({ key: 'arbol', dur: DUR['arbol'], file: sceneFile('arbol', SCENE, svg, html, js), decision: mapT('arbol', 4.3) });
 }
 
 // ================= 4. RANDOM FOREST =================
@@ -278,8 +325,8 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   const nB = votes.filter((v) => v === 1).length;
   const html = panel(p, { name: 'Random Forest', aka: 'Bagging: muestras y variables al azar', line: 'Muchos árboles con datos al azar; decide la mayoría', math: 'ŷ = moda { h₁(x), h₂(x), h₃(x) }' })
     + `<div class="out" id="${p}-out">`
-    + F.map((t, k) => `<div class="row" id="${p}-v${k}"><span>Árbol ${k + 1}</span><span class="mut">· ${t.idx.length} de ${D.pts.length} datos ·</span><span class="sw ${t.vote ? 'swB' : 'swA'}"></span><b>${t.vote ? 'B' : 'A'}</b></div>`).join('')
-    + `<div class="dec" id="${p}-dec" style="margin-top:28px">Votos B ${nB} · A ${3 - nB} → Clase ${nB >= 2 ? 'B' : 'A'}</div></div>`;
+    + F.map((t, k) => `<div class="row" id="${p}-v${k}"><span>Árbol ${k + 1}</span><span class="mut">· ${t.idx.length} de ${D.pts.length} datos ·</span><span class="sw ${t.vote ? 'swB' : 'swA'}"></span><b>${t.vote ? 'Paga' : 'No paga'}</b></div>`).join('')
+    + `<div class="dec" id="${p}-dec" style="margin-top:28px">Votos: Paga ${nB} · No paga ${3 - nB} → ${nB >= 2 ? 'Paga' : 'No paga'}</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   const notIn = (t) => D.pts.map((_, i) => i).filter((i) => !t.idx.includes(i));
   F.forEach((t, k) => {
@@ -296,7 +343,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   js += `\n`;
   js += `popQ(4.3,${nB >= 2 ? 1 : 0});blurIn('#${p}-dec',4.3);\n`;
   js += `out(['#${p}-panel','#${p}-out','[id^="${p}-t"]','#${p}-q'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'bosque', dur: SCENE, file: sceneFile('bosque', SCENE, svg, html, js), decision: 4.3 });
+  scenes.push({ key: 'bosque', dur: DUR['bosque'], file: sceneFile('bosque', SCENE, svg, html, js), decision: mapT('bosque', 4.3) });
 }
 
 // ================= 5. GRADIENT BOOSTING =================
@@ -328,7 +375,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   const html = panel(p, { name: 'Gradient Boosting', aka: 'XGBoost · LightGBM · CatBoost', line: 'Cada árbol nuevo corrige el error que dejó el anterior', math: 'F<sub>m</sub>(x) = F<sub>m−1</sub>(x) + η · h<sub>m</sub>(x)' })
     + `<div class="out" id="${p}-out">`
     + losses.map((v, m) => `<div class="row" id="${p}-l${m}"><span style="width:150px">${m === 0 ? 'Inicio' : 'Árbol ' + m}</span><span class="bar" id="${p}-b${m}" style="width:${bw(v)}px"></span><span>pérdida ${f2(v)}</span></div>`).join('')
-    + `<div class="dec" id="${p}-dec" style="margin-top:22px">F(x) = ${f2(G.qScores[2])} ≥ 0.5 → Clase B</div></div>`;
+    + `<div class="dec" id="${p}-dec" style="margin-top:22px">F(x) = ${f2(G.qScores[2])} ≥ 0.5 → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `\n`;
   js += `inn('#${p}-l0',0.8);tl.fromTo('#${p}-b0',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.4,ease:'expo.out'},0.8);\n`;
@@ -343,7 +390,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   });
   js += `popQ(4.5,1);blurIn('#${p}-dec',4.5);\n`;
   js += `out(['#${p}-panel','#${p}-out','[id^="${p}-reg"]','[id^="${p}-st"]','[id^="${p}-w"]','#${p}-q'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'boosting', dur: SCENE, file: sceneFile('boosting', SCENE, svg, html, js), decision: 4.5 });
+  scenes.push({ key: 'boosting', dur: DUR['boosting'], file: sceneFile('boosting', SCENE, svg, html, js), decision: mapT('boosting', 4.5) });
 }
 
 // ================= 6. SVM =================
@@ -383,7 +430,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   const html = panel(p, { name: 'Máquinas de Vectores de Soporte', aka: 'SVM · optimización cuadrática', line: 'Traza la frontera con el margen más amplio posible', math: 'f(x) = signo(w · x + b)' })
     + `<div class="out" id="${p}-out" style="top:680px">
       <div class="row" id="${p}-r0"><span class="sw" style="border:2.5px solid var(--color-ink);border-radius:50%;width:22px;height:22px"></span><span>vectores de soporte: los puntos que fijan el margen</span></div>
-      <div class="dec" id="${p}-dec" style="margin-top:30px">w · x + b = +${f2(sQ)} &gt; 0 → Clase B</div></div>`;
+      <div class="dec" id="${p}-dec" style="margin-top:30px">w · x + b = +${f2(sQ)} &gt; 0 → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `\n`;
   js += `tl.fromTo(['#${p}-h','#${p}-lo','#${p}-hi'],{opacity:0},{opacity:1,duration:0.35,ease:'power2.out'},1.0);\n`;
@@ -395,7 +442,7 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   js += `popQ(4.4,${sQ > 0 ? 1 : 0});blurIn('#${p}-dec',4.4);\n`;
   js += `out(['#${p}-panel','#${p}-out','#${p}-h','#${p}-lo','#${p}-hi','[id^="${p}-sv"]','#${p}-perp','#${p}-ml','#${p}-q'],${SCENE - 0.22});\n`;
   let file = sceneFile('svm', SCENE, svg, html, js);
-  scenes.push({ key: 'svm', dur: SCENE, file, decision: 4.4 });
+  scenes.push({ key: 'svm', dur: DUR['svm'], file: file, decision: mapT('svm', 4.4) });
 }
 
 // ================= 7. K-NN =================
@@ -408,8 +455,8 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   svg += pts2d(p) + qMark(p, Q.x, Q.y);
   const html = panel(p, { name: 'K-Vecinos más cercanos', aka: 'K-NN · K = 5 · distancia euclidiana', line: 'Busca los K datos más cercanos y vota', math: 'd(p, q) = √Σ (p<sub>i</sub> − q<sub>i</sub>)²' })
     + `<div class="out" id="${p}-out"><div class="row" style="gap:26px;flex-wrap:wrap;height:auto">`
-    + K.nn.map((o, k) => `<span id="${p}-n${k}" style="display:inline-flex;align-items:center;gap:10px"><span class="sw ${D.pts[o.i].c ? 'swB' : 'swA'}"></span>${f2(o.d)}</span>`).join('')
-    + `</div><div class="dec" id="${p}-dec" style="margin-top:40px">B ${K.votesB} · A ${K.K - K.votesB} → Clase B</div></div>`;
+    + K.nn.map((o, k) => `<span id="${p}-k${k}" style="display:inline-flex;align-items:center;gap:10px"><span class="sw ${D.pts[o.i].c ? 'swB' : 'swA'}"></span>${f2(o.d)}</span>`).join('')
+    + `</div><div class="dec" id="${p}-dec" style="margin-top:40px">Paga ${K.votesB} · No paga ${K.K - K.votesB} → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `\n`;
   // distance to every stored record
@@ -419,11 +466,11 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   js += `tl.to([${far.map((i) => `'#${p}-p${i}'`).join(',')}],{opacity:0.25,duration:0.3},2.0);\n`;
   js += `tl.to([${nn.map((i) => `'#${p}-d${i}'`).join(',')}],{opacity:1,attr:{'stroke-width':3},stroke:'#16232F',duration:0.3},2.0);\n`;
   js += `tl.fromTo('#${p}-circ',{attr:{r:0}},{attr:{r:${(K.radius * S + 14).toFixed(1)}},duration:0.6,ease:'expo.out'},2.1);\n`;
-  js += `tl.fromTo('[id^="${p}-n"]',{opacity:0},{opacity:1,duration:0.2,stagger:0.15},2.5);\n`;
+  js += `tl.fromTo('[id^="${p}-k"]',{opacity:0},{opacity:1,duration:0.2,stagger:0.15},2.5);\n`;
   js += `popQ(4.2,${K.c});blurIn('#${p}-dec',4.2);\n`;
   js += `out(['#${p}-panel','#${p}-out','.${p}-dl','#${p}-circ','#${p}-q'],${SCENE - 0.22});\n`;
   js += `tl.to([${far.map((i) => `'#${p}-p${i}'`).join(',')}],{opacity:1,duration:0.2,ease:'power3.in'},${SCENE - 0.22});\n`;
-  scenes.push({ key: 'knn', dur: SCENE, file: sceneFile('knn', SCENE, svg, html, js), decision: 4.2 });
+  scenes.push({ key: 'knn', dur: DUR['knn'], file: sceneFile('knn', SCENE, svg, html, js), decision: mapT('knn', 4.2) });
 }
 
 // ================= 8. NAIVE BAYES =================
@@ -439,9 +486,9 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   const [pa, pb] = N.post;
   const html = panel(p, { name: 'Naive Bayes', aka: 'Supone variables independientes: elipses alineadas a los ejes', line: 'Aplica el teorema de Bayes; gana la clase más probable', math: 'P(C | x) ∝ P(C) · ∏ P(x<sub>i</sub> | C)' })
     + `<div class="out" id="${p}-out">
-      <div class="row" id="${p}-ra"><span style="width:190px">P(A | x)</span><span class="bar" id="${p}-ba" style="width:${Math.round(pa * 360)}px;background:var(--color-a)"></span><b>${f2(pa)}</b></div>
-      <div class="row" id="${p}-rb"><span style="width:190px">P(B | x)</span><span class="bar" id="${p}-bb" style="width:${Math.round(pb * 360)}px;background:var(--color-b)"></span><b>${f2(pb)}</b></div>
-      <div class="dec" id="${p}-dec" style="margin-top:34px">${f2(pb)} &gt; ${f2(pa)} → Clase B</div></div>`;
+      <div class="row" id="${p}-ra"><span style="width:260px">P(no paga | x)</span><span class="bar" id="${p}-ba" style="width:${Math.round(pa * 360)}px;background:var(--color-a)"></span><b>${f2(pa)}</b></div>
+      <div class="row" id="${p}-rb"><span style="width:260px">P(paga | x)</span><span class="bar" id="${p}-bb" style="width:${Math.round(pb * 360)}px;background:var(--color-b)"></span><b>${f2(pb)}</b></div>
+      <div class="dec" id="${p}-dec" style="margin-top:34px">${f2(pb)} &gt; ${f2(pa)} → Paga</div></div>`;
   let js = HELPERS(p, SCENE) + `panelIn(0.05);\n`;
   js += `\n`;
   js += `tl.fromTo(['#${p}-e01','#${p}-e02'],{strokeDashoffset:1},{strokeDashoffset:0,duration:0.8,stagger:0.15,ease:'power2.inOut'},0.9);inn('#${p}-c0',1.3);\n`;
@@ -450,17 +497,20 @@ const drawSplit = (p, id, s, t, d = 0.55) => `drawLine('#${id}',${t},${X(s.x0)},
   js += `inn('#${p}-rb',3.0);tl.fromTo('#${p}-bb',{scaleX:0,transformOrigin:'0 50%'},{scaleX:1,duration:0.6,ease:'expo.out'},3.0);\n`;
   js += `popQ(4.2,${pb > pa ? 1 : 0});blurIn('#${p}-dec',4.2);\n`;
   js += `out(['#${p}-panel','#${p}-out','[id^="${p}-e"]','#${p}-c0','#${p}-c1'],${SCENE - 0.22});\n`;
-  scenes.push({ key: 'bayes', dur: SCENE, file: sceneFile('bayes', SCENE, svg, html, js), decision: 4.2 });
+  scenes.push({ key: 'bayes', dur: DUR['bayes'], file: sceneFile('bayes', SCENE, svg, html, js), decision: mapT('bayes', 4.2) });
 }
 
 // ================= OUTRO =================
 {
   const p = 'fin', Q = D.Q;
   const svg = grid(p) + axes(p) + pts2d(p) + qMark(p, Q.x, Q.y, '');
-  const html = panel(p, { name: 'Un mismo dato, ocho maneras de decidir', line: 'Cada modelo traduce los datos en una regla distinta' });
+  const html = panel(p, { name: 'Ocho modelos, ocho maneras de decidir', line: 'La calidad de la decisión depende de los datos' });
   let js = HELPERS(p, OUTRO) + `panelIn(0.1);\n`;
   js += `popQ(0.3,1);\n`;
-  scenes.push({ key: 'cierre', dur: OUTRO, file: sceneFile('cierre', OUTRO, svg, html, js), decision: null });
+  // "todos aprenden de los datos": the data the models learned from lights up, case by case
+  js += `tl.fromTo('.${p}-pt',{opacity:0.25},{opacity:1,duration:0.3,stagger:0.04,ease:'power2.out'},1.0);\n`;
+  js += `tl.fromTo('.${p}-lw',{color:'#B4BFCA'},{color:'#0F7B6C',duration:0.25,stagger:0.1,ease:'none'},1.6);\n`;
+  scenes.push({ key: 'cierre', dur: DUR['cierre'], file: sceneFile('cierre', OUTRO, svg, html, js), decision: null });
 }
 
 // ---------- write scenes ----------
@@ -479,16 +529,16 @@ const PEAK = { 'whoosh-short': 0.162, whoosh: 0.162, pop: 0.12, 'click-soft': 0.
 let ai = 0;
 scenes.forEach((s, k) => {
   hosts += `      <div id="${s.key}" data-composition-id="${s.key}" data-composition-src="compositions/${s.key}.html" data-start="${t}" data-duration="${s.dur}" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>\n`;
-  if (k > 0) { const w = whooshes[k % 2]; audio += `      <audio id="sfx-cut-${k}" class="clip" src="assets/sfx/${w}.mp3" data-start="${+(t - PEAK[w] + 0.033).toFixed(3)}" data-duration="0.57" data-track-index="2" data-volume="0.3"></audio>\n`; }
-  if (s.decision != null) { const pp = pops[ai++ % 2]; audio += `      <audio id="sfx-dec-${k}" class="clip" src="assets/sfx/${pp}.mp3" data-start="${+(t + s.decision - PEAK[pp] + 0.033).toFixed(3)}" data-duration="0.37" data-track-index="3" data-volume="0.55"></audio>\n`; }
+  if (k > 0) { const w = whooshes[k % 2]; audio += `      <audio id="sfx-cut-${k}" class="clip" src="assets/sfx/${w}.mp3" data-start="${+(t - PEAK[w] + 0.033).toFixed(3)}" data-duration="0.57" data-track-index="2" data-volume="0.18"></audio>\n`; }
+  if (s.decision != null) { const pp = pops[ai++ % 2]; audio += `      <audio id="sfx-dec-${k}" class="clip" src="assets/sfx/${pp}.mp3" data-start="${+(t + s.decision - PEAK[pp] + 0.033).toFixed(3)}" data-duration="0.37" data-track-index="3" data-volume="0.3"></audio>\n`; }
   t = +(t + s.dur).toFixed(2);
 });
 const root = `<!doctype html>
 <html lang="es" data-composition-variables='[
   {"id":"color-ground","type":"color","label":"Fondo","default":"#EEF1F4"},
   {"id":"color-ink","type":"color","label":"Tinta","default":"#16232F"},
-  {"id":"color-a","type":"color","label":"Clase A","default":"#2B5D8C"},
-  {"id":"color-b","type":"color","label":"Clase B","default":"#B8642A"},
+  {"id":"color-a","type":"color","label":"No pagó","default":"#2B5D8C"},
+  {"id":"color-b","type":"color","label":"Pagó","default":"#B8642A"},
   {"id":"color-accent","type":"color","label":"Decisión","default":"#0F7B6C"}
 ]'>
   <head>
@@ -504,7 +554,8 @@ const root = `<!doctype html>
   </head>
   <body>
     <div id="root" data-composition-id="main" data-start="0" data-duration="${t}" data-width="1920" data-height="1080">
-${hosts}${audio}    </div>
+${hosts}      <audio id="voz" class="clip" src="assets/voice/narracion.wav" data-start="0" data-duration="${VOICE_LEN}" data-track-index="4" data-volume="1"></audio>
+${audio}    </div>
     <script>
       window.__timelines = window.__timelines || {};
       window.__timelines["main"] = gsap.timeline({ paused: true });
