@@ -1,0 +1,150 @@
+1
+00:00:00,060 --> 00:00:02,271
+Una inteligencia artificial no adivina:
+
+2
+00:00:02,321 --> 00:00:05,983
+aprende de casos pasados
+cuya respuesta ya conocemos.
+
+3
+00:00:06,033 --> 00:00:11,489
+Eso es aprendizaje supervisado. Veamos ocho
+formas en que decide ante un caso nuevo.
+
+4
+00:00:11,989 --> 00:00:17,699
+La regresión lineal traza la recta que pasa
+lo más cerca posible de todos los casos.
+
+5
+00:00:17,749 --> 00:00:22,648
+Con ella, la IA predice un número: por
+ejemplo, cuánto podría pagar alguien al mes
+
+6
+00:00:22,698 --> 00:00:23,887
+según sus ingresos.
+
+7
+00:00:24,387 --> 00:00:28,007
+La regresión logística no da un
+número, sino una probabilidad:
+
+8
+00:00:28,057 --> 00:00:30,865
+qué tan posible es que esta persona pague.
+
+9
+00:00:30,915 --> 00:00:35,859
+Si supera el 50 %, la IA
+dice que sí. Aquí da 81 %.
+
+10
+00:00:36,359 --> 00:00:39,082
+El árbol de decisión
+trabaja sobre personas:
+
+11
+00:00:39,132 --> 00:00:42,581
+en azul, quien no pagó;
+en cobre, quien sí.
+
+12
+00:00:42,631 --> 00:00:47,761
+Hace preguntas de sí o no, como un
+cuestionario, hasta separar los dos grupos.
+
+13
+00:00:47,811 --> 00:00:49,640
+Nuestro caso cae con los que pagan.
+
+14
+00:00:50,140 --> 00:00:52,394
+Random Forest parte de una idea simple:
+
+15
+00:00:52,444 --> 00:00:57,884
+un solo árbol puede equivocarse. Por eso
+entrena varios, cada uno con una parte
+
+16
+00:00:57,934 --> 00:01:01,766
+distinta de los datos, y
+luego votan, como un jurado.
+
+17
+00:01:01,816 --> 00:01:04,200
+Aquí, dos de tres dicen que pagará.
+
+18
+00:01:04,640 --> 00:01:08,558
+Gradient Boosting también usa
+varios árboles, pero uno tras otro:
+
+19
+00:01:08,608 --> 00:01:12,355
+cada árbol nuevo se fija en los
+errores del anterior y los corrige.
+
+20
+00:01:12,405 --> 00:01:15,386
+Así, el error total baja paso a paso.
+
+21
+00:01:15,886 --> 00:01:20,444
+Las máquinas de vectores de soporte buscan
+la calle más ancha posible entre los dos
+
+22
+00:01:20,494 --> 00:01:24,308
+grupos. Los casos que quedan en
+el borde son los que la definen.
+
+23
+00:01:24,358 --> 00:01:27,765
+El caso nuevo se clasifica según
+el lado de la calle en que cae.
+
+24
+00:01:28,265 --> 00:01:31,885
+K vecinos más cercanos funciona
+como preguntarles a los vecinos:
+
+25
+00:01:31,935 --> 00:01:36,177
+busca los cinco casos más parecidos
+al nuevo y mira qué pasó con ellos.
+
+26
+00:01:36,227 --> 00:01:38,995
+Tres pagaron y dos no: gana la mayoría.
+
+27
+00:01:39,495 --> 00:01:42,965
+Naive Bayes calcula a qué grupo
+se parece más el caso nuevo,
+
+28
+00:01:43,015 --> 00:01:47,130
+mirando cada dato por separado, como
+si no tuvieran relación entre sí.
+
+29
+00:01:47,180 --> 00:01:50,886
+Aquí, la probabilidad de
+que pague es de 82 %.
+
+30
+00:01:51,386 --> 00:01:53,981
+Ocho modelos, ocho maneras de decidir.
+
+31
+00:01:54,031 --> 00:01:57,508
+Ninguno adivina: todos aprenden
+de los datos que les damos.
+
+32
+00:01:57,558 --> 00:02:01,563
+Por eso, una decisión de la IA
+solo es tan buena como esos datos.
